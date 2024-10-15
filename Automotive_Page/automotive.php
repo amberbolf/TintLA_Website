@@ -23,6 +23,11 @@
             width: 60%;
             margin: 0 auto;
         }
+        .container3-blue {
+            width: 60%;
+            margin: 0 auto;
+            /*background-color: */
+        }
         header {
             background-color: #333;
             color: white;
@@ -77,6 +82,12 @@
             border: 5px solid #ddd; 
             padding: 10px;
         }
+        .section-center-boarder-top {
+            text-align: center;
+            margin-bottom: 40px;
+            border: 5px solid #ddd; 
+            padding: 10px;
+        }
         .section-right {
             text-align: right;
         }
@@ -96,23 +107,25 @@
             border-radius: 15px;
             box-shadow: 0 4px #999;
         }
-        .button:hover{background-color: 3e8341}
+        .button:hover{
+            background-color: 3e8341
+        }
         .button:active{
             background-color: #3e8341;
             box-shadow: 0 5px #666;
             transform: translateY(4px);
         }
-
         footer{
             background-color: #333;
             color: white;
             padding: 10px 0;
-            text-align: center;
+            align-items: center;                  
+            display: flex;       
         }
-        
     </style>
 
 </head>
+
 <body>
     <div class="container1">
     <header>
@@ -132,56 +145,58 @@
                     >Facebook Link<
                 </ul>
             </nav>
-        </header>
-        
-        <div class ="container2">
-            <section class="section-center">
-                <h2><img src="tintla_logo.png" alt="TINTLA"></h2>
-                
-                <p>TINT LA’s 30+ years of quality service gives us savvy know how and <br>
-                understanding of all automotive, residential and commercial film requirements. <br>
-                Our exclusively made Tintwork window film and other well-known brands are <br>
-                in stock. All are tested to ensure the ultimate in protection from sun fading, <br> 
-                deterioration of interiors, sun glare reduction, heat rejection and privacy.</p>
+    </header>
+    </div>
 
-                
-            <a href="ContactUs.php" class="button"> Get A Quote </a>
+    <div class ="container1">  
+            <section class="section-center-boarder-top">
+                <h1>AUTOMOTIVE TINTING</h1>
             </section>
-
-            <section class="section-center">
-                <h2><img src="tint_shades2.jpg" alt="Tint_shades"></h2>
-            </section>
-        </div>    
-        <div class ="container3">
-            <section class="section-center-boarder">
-                <h2>INSTALLATION PROCESS</h2>
-                <p>We come to you! Our mobile installers will come to you rlocation and use your garage to tint your vehicle.</p>
-                <p>Enjoy the benefits of mobile installation, including saving time and effort, no need to wait in a shop, and installation done in a clean and protected environment.</p>
-                <p>Experience a high-quality window tint installation in the comfort of your own home.</p>
-            </section>
-            
-            <section class="section-center-boarder">
-                <h2>INSTALLERS</h2>
-                <p>They will use high-quality materials and techniques to ensure a professional finish.</p>
-                <p>They are responsible for ensuring a high-quality installation that meets our standards.</p>
-                <p>Our network of installers is carefully selected for their expertise and experience.</p>
-            </section>
-            
-            <section class="section-center-boarder">
-                <h2>WARRANTY</h2>
-                <p>Our installers provide a lifetime warranty on their work.</p>
-                <p>Tint LA offers customer support and assistance as needed.</p>
-                <p>We stand behind the quality of our installations and will work with you to resolve any issues that may arise.</p>
-            </section>
-        </div>    
-        </main>
+    </div>
         
-        <footer>
-            <p>&copy; Now serving Los Angeles and all the surrounding suburbs. Give us a call at 626.548.4683 (San Gabriel Valley) or 818.200.6657 (San Fernando Valley or Los Angeles) to schedule your appointment now.
-            Same day service, quality work, we tint any make and model of vehicle and only the best quality in film brands with a lifetime warranty.</p>
-        </footer>
-    </div>    
+    <div class ="container3">
+            <section class="section-center">
+                <h2>WHY WINDOW FILM IS GREAT FOR YOUR CAR</h2>
+                <p>Southern California is part of the desert. It’s hot and the sun can cause damage to your skin which can lead to skin cancer. Most windows on cars do not have UV protection so it’s crucial to tint your windows to protect your skin. Even the factory colored glass that comes with most trucks and SUVs on the back half does not have the same heat rejection and UV protection that our films have. Why bake in your car and blast your air conditioning all the time? Window film can block alot of that heat for the ultimate in comfort.
+                    TINT LA years of quality service gives us savvy know how and understanding of all auto and commercial film requirements. Count on us to deliver just what you want.</p>
+            </section>
+    </div>
+
+    <div class ="container3">
+            <section class="section-center">
+                <p>Our exclusively made TINTWORK WINDOW FILM has endured years of rigorous testing to ensure the ultimate in protection from heat rejection, deterioration of interiors, sun glare and privacy.
+                    TINTWORK FILM safeguards your fabrics, leathers, and personal items. Our tints add a degree of safety by securing or ‘holding’ broken glass to the film in the event of an accident or vandalism. This can be life saving for you, your family and pets.
+                    Choose from a vast array of high-performance carbon or ceramic automotive films. Installed by savvy industry professionals and backed by a lifetime warranty gives our clients peace of mind.
+                    Same day service, quality work, we tint any make and model of vehicle and only the best quality in film brands. TINT LA carries tint shades of film in 1%, 5% 15% 20% 35% 50% and 70%. And we also sell rolls of film to other auto window tinting companies as well as DIY individuals.
+                </p>
+            </section>
+    </div>
+
+    <div class ="container3">
+
+            <section class="section-center-boarder">
+                <h2><img src="tint-boxes.png" alt="Tint_Boxes"></h2>
+            </section>
+    </div>
 </body>
 
-
-</html>
+<div class="container1">
+    <footer>
+        <div class = "logo">
+            <a href="Home.php">
+                <img src="tintla_logo.png" alt="TINTLA">
+            </a>
+        </div>
+            <nav>
+                <ul>
+                    <li><a href="AutomotiveTinting.php">Automototive Tinting</a></li>
+                    <li><a href="CommercialTinting.php">Commercial Tinting</a></li>
+                    <li><a href="ResidentialTinting.php">Residential Tinting</a></li>
+                    <li><a href="TintworkFilm.php">Tintwork Film</a></li>
+                    <li><a href="TintingPhotoGallery.php">Tinting Photo Gallery</a></li>
+                    <li><a href="ContactUs.php">Contact Us</a></li>
+                    >Facebook Link<
+                </ul>
+            </nav>
+    </footer>
+</div>

@@ -23,6 +23,11 @@
             width: 60%;
             margin: 0 auto;
         }
+        .container3-blue {
+            width: 60%;
+            margin: 0 auto;
+            /*background-color: */
+        }
         header {
             background-color: #333;
             color: white;
@@ -77,6 +82,12 @@
             border: 5px solid #ddd; 
             padding: 10px;
         }
+        .section-center-boarder-top {
+            text-align: center;
+            margin-bottom: 40px;
+            border: 5px solid #ddd; 
+            padding: 10px;
+        }
         .section-right {
             text-align: right;
         }
@@ -96,23 +107,25 @@
             border-radius: 15px;
             box-shadow: 0 4px #999;
         }
-        .button:hover{background-color: 3e8341}
+        .button:hover{
+            background-color: 3e8341
+        }
         .button:active{
             background-color: #3e8341;
             box-shadow: 0 5px #666;
             transform: translateY(4px);
         }
-
         footer{
             background-color: #333;
             color: white;
             padding: 10px 0;
-            text-align: center;
+            align-items: center;                  
+            display: flex;       
         }
-        
     </style>
 
 </head>
+
 <body>
     <div class="container1">
     <header>
@@ -132,56 +145,70 @@
                     >Facebook Link<
                 </ul>
             </nav>
-        </header>
-        
-        <div class ="container2">
-            <section class="section-center">
-                <h2><img src="tintla_logo.png" alt="TINTLA"></h2>
-                
-                <p>TINT LA’s 30+ years of quality service gives us savvy know how and <br>
-                understanding of all automotive, residential and commercial film requirements. <br>
-                Our exclusively made Tintwork window film and other well-known brands are <br>
-                in stock. All are tested to ensure the ultimate in protection from sun fading, <br> 
-                deterioration of interiors, sun glare reduction, heat rejection and privacy.</p>
+    </header>
+    </div>
+
+    <div class = "container1">  
+            <section class="section-center-boarder-top">
+                <h1>CONTACT US</h1>
+            </section>
+    </div>
+
+    <div class="container1">
+        <section class="section-left-boarder">
+            <action="ContactUs_Output.php" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name"><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email"><br><br>
+
+                <label for="phone">Phone Number:</label>
+                <input type="phone" id="phone" name="phone"><br><br>
+
+                <label for="city">City:</label>
+                <input type="city" id="city" name="city"><br><br>
+
+                <label for="contact">Prefered Contact:</label>
+                <input type="contact" id="contact" name="contact"><br><br>
+
+                <label for="make">Car Make:</label>
+                <input type="make" id="make" name="make"><br><br>
+
+                <label for="model">Car Model:</label>
+                <input type="model" id="model" name="model"><br><br>
+
+                <label for="Year">Car Year:</label>
+                <input type="Year" id="Year" name="Year"><br><br>
 
                 
-            <a href="ContactUs.php" class="button"> Get A Quote </a>
-            </section>
 
-            <section class="section-center">
-                <h2><img src="tint_shades2.jpg" alt="Tint_shades"></h2>
-            </section>
-        </div>    
-        <div class ="container3">
-            <section class="section-center-boarder">
-                <h2>INSTALLATION PROCESS</h2>
-                <p>We come to you! Our mobile installers will come to you rlocation and use your garage to tint your vehicle.</p>
-                <p>Enjoy the benefits of mobile installation, including saving time and effort, no need to wait in a shop, and installation done in a clean and protected environment.</p>
-                <p>Experience a high-quality window tint installation in the comfort of your own home.</p>
-            </section>
-            
-            <section class="section-center-boarder">
-                <h2>INSTALLERS</h2>
-                <p>They will use high-quality materials and techniques to ensure a professional finish.</p>
-                <p>They are responsible for ensuring a high-quality installation that meets our standards.</p>
-                <p>Our network of installers is carefully selected for their expertise and experience.</p>
-            </section>
-            
-            <section class="section-center-boarder">
-                <h2>WARRANTY</h2>
-                <p>Our installers provide a lifetime warranty on their work.</p>
-                <p>Tint LA offers customer support and assistance as needed.</p>
-                <p>We stand behind the quality of our installations and will work with you to resolve any issues that may arise.</p>
-            </section>
-        </div>    
-        </main>
-        
-        <footer>
-            <p>&copy; Now serving Los Angeles and all the surrounding suburbs. Give us a call at 626.548.4683 (San Gabriel Valley) or 818.200.6657 (San Fernando Valley or Los Angeles) to schedule your appointment now.
-            Same day service, quality work, we tint any make and model of vehicle and only the best quality in film brands with a lifetime warranty.</p>
-        </footer>
-    </div>    
+                <a href="ContactUs_Output.php" class="button"> Submit </a>
+
+
+            </action>
+        </section>
+    </div>
 </body>
 
 
-</html>
+<div class="container1">
+    <footer>
+        <div class = "logo">
+            <a href="Home.php">
+                <img src="tintla_logo.png" alt="TINTLA">
+            </a>
+        </div>
+            <nav>
+                <ul>
+                    <li><a href="AutomotiveTinting.php">Automototive Tinting</a></li>
+                    <li><a href="CommercialTinting.php">Commercial Tinting</a></li>
+                    <li><a href="ResidentialTinting.php">Residential Tinting</a></li>
+                    <li><a href="TintworkFilm.php">Tintwork Film</a></li>
+                    <li><a href="TintingPhotoGallery.php">Tinting Photo Gallery</a></li>
+                    <li><a href="ContactUs.php">Contact Us</a></li>
+                    >Facebook Link<
+                </ul>
+            </nav>
+    </footer>
+</div>
