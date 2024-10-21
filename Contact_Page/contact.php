@@ -142,7 +142,7 @@
                     <li><a href="TintworkFilm.php">Tintwork Film</a></li>
                     <li><a href="TintingPhotoGallery.php">Tinting Photo Gallery</a></li>
                     <li><a href="ContactUs.php">Contact Us</a></li>
-                    >Facebook Link<
+                    >Facebook Links<
                 </ul>
             </nav>
     </header>
