@@ -142,7 +142,7 @@
                     <li><a href="TintworkFilm.php">Tintwork Film</a></li>
                     <li><a href="TintingPhotoGallery.php">Tinting Photo Gallery</a></li>
                     <li><a href="ContactUs.php">Contact Us</a></li>
-                    >Facebook Links<
+                    >Facebook Link<
                 </ul>
             </nav>
     </header>
@@ -155,39 +155,35 @@
     </div>
 
     <div class="container1">
-        <section class="section-left-boarder">
-            <action="ContactUs_Output.php" method="post">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name"><br><br>
+    <section class="section-left-boarder">
+        <form action="ContactUs.php" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" maxlength="50" required><br><br>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email"><br><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" maxlength="100" required><br><br>
 
-                <label for="phone">Phone Number:</label>
-                <input type="phone" id="phone" name="phone"><br><br>
+            <label for="phone_num">Phone Number:</label>
+            <input type="text" id="phone_num" name="phone_num" required><br><br>
 
-                <label for="city">City:</label>
-                <input type="city" id="city" name="city"><br><br>
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" maxlength="50" required><br><br>
 
-                <label for="contact">Prefered Contact:</label>
-                <input type="contact" id="contact" name="contact"><br><br>
+            <label for="preferred_contact">Preferred Contact:</label>
+            <input type="text" id="preferred_contact" name="preferred_contact" maxlength="20" required><br><br>
 
-                <label for="make">Car Make:</label>
-                <input type="make" id="make" name="make"><br><br>
+            <label for="car_make">Car Make:</label>
+            <input type="text" id="car_make" name="car_make" maxlength="50" required><br><br>
 
-                <label for="model">Car Model:</label>
-                <input type="model" id="model" name="model"><br><br>
+            <label for="car_model">Car Model:</label>
+            <input type="text" id="car_model" name="car_model" maxlength="50" required><br><br>
 
-                <label for="Year">Car Year:</label>
-                <input type="Year" id="Year" name="Year"><br><br>
+            <label for="car_year">Car Year:</label>
+            <input type="number" id="car_year" name="car_year" required><br><br>
 
-                
-
-                <a href="ContactUs_Output.php" class="button"> Submit </a>
-
-
-            </action>
-        </section>
+            <input type="submit" class="button" value="Submit">
+        </form>
+    </section>
     </div>
 </body>
 
@@ -212,3 +208,66 @@
             </nav>
     </footer>
 </div>
+
+<?php
+
+// database1 connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$databaseName="database1";
+
+$conn = new mysqli($servername, $username, $password,$databaseName);
+
+// checks connection
+if ($conn->connect_error) {
+	die("connection failed". $conn->connect_error);
+}
+echo "connected";
+
+// handles form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // retrieves form data
+    //$id = $_POST['id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone_num = $_POST['phone_num'];
+    $city = $_POST['city'];
+    $preferred_contact = $_POST['preferred_contact'];
+    $car_make = $_POST['car_make'];
+    $car_model = $_POST['car_model'];
+    $car_year = $_POST['car_year'];
+
+    // data into database
+    $sql = "INSERT INTO customers (name, email, phone_num, city, preferred_contact, car_make, car_model, car_year) 
+            VALUES ('$name', '$email', '$phone_num', '$city', '$preferred_contact', '$car_make', '$car_model', '$car_year')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+
+// retrieves customer data from database1
+$sql = "SELECT * FROM customers";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+	echo "<table>";
+	while ($row = $result->fetch_assoc()) {
+		echo "<tr>";
+        echo "<td>".$row["id"]."</td>";
+        echo "<td>".$row["name"]."</td>";
+        echo "<td>".$row["email"]."</td>";
+        echo "<td>".$row["phone_num"]."</td>";
+        echo "<td>".$row["city"]."</td>";
+        echo "<td>".$row["preferred_contact"]."</td>";
+        echo "<td>".$row["car_make"]."</td>";
+        echo "<td>".$row["car_model"]."</td>";
+        echo "<td>".$row["car_year"]."</td>";
+        echo "</tr>";
+	}
+}
+?>
