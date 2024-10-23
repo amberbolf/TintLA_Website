@@ -173,7 +173,7 @@
     </div>
 
     <div class ="container3">
-        <section class="section-center-boarder">
+        <section class="section-center">
         <div style="display: inline-block; text-align: center; margin-right: 20px;">
                 <img src="tint5.png" alt="5%">
                 <div><h2>5%</h2></div>
