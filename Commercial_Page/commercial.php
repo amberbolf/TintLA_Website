@@ -158,7 +158,7 @@
 
     <div class="container2">
         <section class="section-center">
-            <div style="display: inline-block; text-align: center; margin-right: 200px;">
+            <div style="display: inline-block; text-align: center; margin-right: 150px;">
                 <h2>INSIDE VIEW</h2>
                 <img src="commercial_insideview.png" alt="INSIDE_VIEW">
                 <div>Only 5% Light Allowed Through</div>
@@ -169,6 +169,14 @@
                 <img src="commercial_outsideview.png" alt="OUTSIDE_VIEW">
                 <div>Completely Reflective</div>
             </div>
+        </section>
+    </div>
+
+    <div class ="container3">
+        <section class="section-center-boarder">                
+            <p>Window films help protect your office or retail location from theft, vandals, sun damage and natural disasters while offering comfort to your customers and staff alike.
+                Add Outlook Window Tinting Services is our sister company that specializes in Commercial and Residential window tinting. Please visit their website directly for more information and choices of window films for your commercial building.
+            </p>
         </section>
     </div>
 
