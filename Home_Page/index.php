@@ -117,13 +117,13 @@
     <div class="container1">
     <header>
         <div class = "logo">
-            <a href="Home.php">
-                <img src="tintla_logo.png" alt="TINTLA">
+            <a href="index.php">
+                <img src="tintla_logo.png" alt="Tintla_logo">
             </a>
         </div>
             <nav>
                 <ul>
-                    <li><a href="AutomotiveTinting.php">Automototive Tinting</a></li>
+                    <li><a href="AutomitiveTinting.php">Automototive Tinting</a></li>
                     <li><a href="CommercialTinting.php">Commercial Tinting</a></li>
                     <li><a href="ResidentialTinting.php">Residential Tinting</a></li>
                     <li><a href="TintworkFilm.php">Tintwork Film</a></li>
@@ -136,7 +136,7 @@
         
         <div class ="container2">
             <section class="section-center">
-                <h2><img src="tintla_logo.png" alt="TINTLA"></h2>
+                <h2><img src="tintla_logo.png" alt="Tintla_logo"></h2>
                 
                 <p>TINT LA’s 30+ years of quality service gives us savvy know how and <br>
                 understanding of all automotive, residential and commercial film requirements. <br>
