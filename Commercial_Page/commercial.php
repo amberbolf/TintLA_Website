@@ -23,10 +23,9 @@
             width: 60%;
             margin: 0 auto;
         }
-        .container3-blue {
-            width: 60%;
+        .container4 {
+            width: 40%;
             margin: 0 auto;
-            /*background-color: */
         }
         header {
             background-color: #333;
@@ -121,7 +120,6 @@
             padding: 10px 0;
             align-items: center;          
             text-align: center;         
-            position: fixed;
             bottom: 0;
             width: 100%;
         }
@@ -158,7 +156,7 @@
     </div>   
 
 
-    <div class="container3">
+    <div class="container2">
         <section class="section-center">
             <div style="display: inline-block; text-align: center; margin-right: 200px;">
                 <h2>INSIDE VIEW</h2>
