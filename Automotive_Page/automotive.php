@@ -173,11 +173,30 @@
     </div>
 
     <div class ="container3">
-
-            <section class="section-center-boarder">
-                <h2><img src="tint-boxes.png" alt="Tint_Boxes"></h2>
-            </section>
+        <section class="section-center-boarder">
+        <div style="display: inline-block; text-align: center; margin-right: 20px;">
+                <img src="tint5.png" alt="5%">
+                <div><h2>5%</h2></div>
+            </div>
+            <div style="display: inline-block; text-align: center; margin-right: 20px;">
+                <img src="tint20.png" alt="20%">
+                <div><h2>20%</h2></div>
+            </div>
+            <div style="display: inline-block; text-align: center; margin-right: 20px;">
+                <img src="tint35.png" alt="35%">
+                <div><h2>35%</h2></div>
+            </div>
+            <div style="display: inline-block; text-align: center; margin-right: 20px;">
+                <img src="tint50.png" alt="50%">
+                <div><h2>50%</h2></div>
+            </div>
+            <div style="display: inline-block; text-align: center; margin-right: 20px;">
+                <img src="tint70.png" alt="70%">
+                <div><h2>70%</h2></div>
+            </div>               
+        </section>
     </div>
+
 </body>
 
 <div class="container1">
