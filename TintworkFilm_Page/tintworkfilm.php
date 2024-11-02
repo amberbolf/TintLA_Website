@@ -151,46 +151,23 @@
 
     <div class ="container1">  
             <section class="section-center-boarder-top">
-                <h1>RESIDENTIAL TINTING</h1>
+                <h1>TINTWORK FILM</h1>
             </section>
-    </div>
-
-    <div class ="container4">
-        <section class="section-center-boarder">                
-            <p>Preserve Your Interior</p>     
-            <p>Add Extra Safety</p> 
-            <p>Cut Utility Bills</p> 
-            <p>Add Value and Style</p> 
-            <p>Add Comfort</p>
-        </section>
-    </div>
-
-    <div class="container2">
-        <section class="section-center">
-            <img src="Res_View1.png" alt="RESIDENTAIL_VIEW1">
-        </section>
-    </div>
-
-    <div class="container2">
-        <section class="section-center">
-            <img src="Res_View2.png" alt="RESIDENTAIL_VIEW2">
-        </section>
     </div>
 
     <div class ="container3">
         <section class="section-center">                
-            <h2><p>Residential Window Tinting</p></h2>  
-            <p>Open Your Home to Safe Light</p> 
-            <p>Clarity. Protection. Efficiency.</p>
-            <img src="Res_View3_resized.png" alt="RESIDENTAIL_VIEW3">
+            <h2><p>Tint LA carries top brand films</p></h2>  
+            <img src="tintwork2.png" alt="TINTWORK_2">
         </section>
     </div>
 
+
     <div class ="container3">
         <section class="section-center-boarder">                
-            <p>Enjoy the ultimate comfort in your home with window tint. Available in a spectrum of shades to reduce glare, block UV rays, and control heat. Decorative films add privacy while enhancing the modern style of your home.</p>
-            <p>Window film also provides security and safety. Our films will assist in safeguarding your home from intruders and natural disasters such as earthquakes and harsh weather while hosting energy efficiency: Cooler in summer and warmer in winter. Our high heat rejection films reduce air conditioning costs resulting in lower utility bills.</p>
-            <p>Add Outlook Window Tinting Services is our sister company that specializes in Commercial and Residential window tinting. Please visit their website directly for more information and choices of window films for your home.</p>
+            <p>Tintwork brand films boast the best clarity giving you beyond HD vision.</p>
+            <p>Value HP is the standard carbon film. It’s a great, economical choice offering a lifetime warranty against bubbling, peeling, and purpling. It also has 99% UV protection and between 30-45% heat rejection</p>
+            <p>Fantasy IR is our high performance ceramic film. It’s an excellent choice for consumers looking for “name brand” films because it matches those high end film brand’s full warranty and high heat rejections. It blocks 99% of harmful UVA and UVB rays and 82% Infrared rejection which makes the ceramic choice at least 20% higher heat rejection versus the carbon.</p>
+            <p>Call us for details. //needs link//</p>
         </section>
     </div>
-</body>
