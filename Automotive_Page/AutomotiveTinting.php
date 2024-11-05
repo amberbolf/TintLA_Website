@@ -130,7 +130,7 @@
     <div class="container1">
     <header>
         <div class = "logo">
-            <a href="Home.php">
+            <a href="Home_Page/Home.php">
                 <img src="tintla_logo.png" alt="TINTLA">
             </a>
         </div>
