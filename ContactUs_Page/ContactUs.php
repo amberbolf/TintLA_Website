@@ -130,18 +130,18 @@
     <div class="container1">
     <header>
         <div class = "logo">
-            <a href="Home.php">
+            <a href="/TintLA_Website/Home_Page/Home.php">
                 <img src="tintla_logo.png" alt="TINTLA">
             </a>
         </div>
             <nav>
                 <ul>
-                    <li><a href="AutomotiveTinting.php">Automototive Tinting</a></li>
-                    <li><a href="CommercialTinting.php">Commercial Tinting</a></li>
-                    <li><a href="ResidentialTinting.php">Residential Tinting</a></li>
-                    <li><a href="TintworkFilm.php">Tintwork Film</a></li>
-                    <li><a href="TintingPhotoGallery.php">Tinting Photo Gallery</a></li>
-                    <li><a href="ContactUs.php">Contact Us</a></li>
+                    <li><a href="/TintLA_Website/Automotive_Page/AutomotiveTinting.php">Automototive Tinting</a></li>
+                    <li><a href="/TintLA_Website/Commercial_Page/CommercialTinting.php">Commercial Tinting</a></li>
+                    <li><a href="/TintLA_Website/Residential_Page/ResidentialTinting.php">Residential Tinting</a></li>
+                    <li><a href="/TintLA_Website/TintworkFilm_Page/TintworkFilm.php">Tintwork Film</a></li>
+                    <li><a href="/TintLA_Website/PhotoGallery_Page/TintingPhotoGallery.php">Tinting Photo Gallery</a></li>
+                    <li><a href="/TintLA_Website/ContactUs_Page/ContactUs.php">Contact Us</a></li>
                     >Facebook Link<
                 </ul>
             </nav>
