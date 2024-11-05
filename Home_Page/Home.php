@@ -96,7 +96,9 @@
             border-radius: 15px;
             box-shadow: 0 4px #999;
         }
-        .button:hover{background-color: 3e8341}
+        .button:hover{
+            background-color: 3e8341
+        }
         .button:active{
             background-color: #3e8341;
             box-shadow: 0 5px #666;

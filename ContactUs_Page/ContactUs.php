@@ -182,6 +182,8 @@
             <input type="number" id="car_year" name="car_year" required><br><br>
 
             <input type="submit" class="button" value="Submit">
+
+            <a href="/TintLA_Website/QuoteOutput_Page/QuoteOutput.php" class="button"> Take Me To My Quote </a>
         </form>
     </section>
     </div>
