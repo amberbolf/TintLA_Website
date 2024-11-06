@@ -152,9 +152,9 @@ $conn = new mysqli($servername, $username, $password,$databaseName);
 if ($conn->connect_error) {
 	die("connection failed". $conn->connect_error);
 }
-echo "connected";
-/*
-// handles form submission
+echo "connected<br>";
+
+// retrieves the most recent submission 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // retrieves form data
     //$id = $_POST['id'];
@@ -162,6 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $phone_num = $_POST['phone_num'];
     $city = $_POST['city'];
+    $state = $_POST['state'];
     $preferred_contact = $_POST['preferred_contact'];
     $car_make = $_POST['car_make'];
     $car_model = $_POST['car_model'];
@@ -173,11 +174,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($conn->query($sql) === TRUE) {
         echo "New record created successfully";
+        $last_id = $conn->insert_id;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-}*/
+}
 
+
+if (isset($last_id)) { 
+    $sql = "SELECT * FROM customers WHERE id = $last_id"; 
+    $result = $conn->query($sql); 
+
+    if ($result->num_rows > 0) { 
+        echo "<table>"; 
+        while ($row = $result->fetch_assoc()) { 
+            echo "<tr>"; 
+            echo "<td>".$row["id"]."</td>"; 
+            echo "<td>".$row["name"]."</td>"; 
+            echo "<td>".$row["email"]."</td>"; 
+            echo "<td>".$row["phone_num"]."</td>"; 
+            echo "<td>".$row["city"]."</td>"; 
+            echo "<td>".$row["state"]."</td>";
+            echo "<td>".$row["preferred_contact"]."</td>"; 
+            echo "<td>".$row["car_make"]."</td>"; 
+            echo "<td>".$row["car_model"]."</td>"; 
+            echo "<td>".$row["car_year"]."</td>"; 
+            echo "</tr>"; 
+        } 
+        echo "</table";
+    } else {
+        echo "No results found";
+    }
+} else {
+    echo "No new record found";
+}
+
+
+
+/*
 // retrieves customer data from database1
 $sql = "SELECT * FROM customers";
 $result = $conn->query($sql);
@@ -198,5 +232,5 @@ if ($result->num_rows > 0) {
         echo "</tr>";
 	}
 }
-
+*/
 ?>

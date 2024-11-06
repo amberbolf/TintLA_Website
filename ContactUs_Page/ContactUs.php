@@ -190,27 +190,6 @@
 </body>
 
 
-<div class="container1">
-    <footer>
-        <div class = "logo">
-            <a href="Home.php">
-                <img src="tintla_logo.png" alt="TINTLA">
-            </a>
-        </div>
-            <nav>
-                <ul>
-                    <li><a href="AutomotiveTinting.php">Automototive Tinting</a></li>
-                    <li><a href="CommercialTinting.php">Commercial Tinting</a></li>
-                    <li><a href="ResidentialTinting.php">Residential Tinting</a></li>
-                    <li><a href="TintworkFilm.php">Tintwork Film</a></li>
-                    <li><a href="TintingPhotoGallery.php">Tinting Photo Gallery</a></li>
-                    <li><a href="ContactUs.php">Contact Us</a></li>
-                    >Facebook Link<
-                </ul>
-            </nav>
-    </footer>
-</div>
-
 <?php
 
 // database1 connection
@@ -225,7 +204,7 @@ $conn = new mysqli($servername, $username, $password,$databaseName);
 if ($conn->connect_error) {
 	die("connection failed". $conn->connect_error);
 }
-echo "connected";
+echo "Connected<br>";
 
 // handles form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -235,6 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $phone_num = $_POST['phone_num'];
     $city = $_POST['city'];
+    $state = $_POST['state'];
     $preferred_contact = $_POST['preferred_contact'];
     $car_make = $_POST['car_make'];
     $car_model = $_POST['car_model'];
@@ -246,30 +226,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($conn->query($sql) === TRUE) {
         echo "New record created successfully";
+        $last_id = $conn->insert_id;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 
 
-// retrieves customer data from database1
-$sql = "SELECT * FROM customers";
-$result = $conn->query($sql);
+// retrieves the most recent submission 
+if (isset($last_id)) { 
+    $sql = "SELECT * FROM customers WHERE id = $last_id"; 
+    $result = $conn->query($sql); 
 
-if ($result->num_rows > 0) {
-	echo "<table>";
-	while ($row = $result->fetch_assoc()) {
-		echo "<tr>";
-        echo "<td>".$row["id"]."</td>";
-        echo "<td>".$row["name"]."</td>";
-        echo "<td>".$row["email"]."</td>";
-        echo "<td>".$row["phone_num"]."</td>";
-        echo "<td>".$row["city"]."</td>";
-        echo "<td>".$row["preferred_contact"]."</td>";
-        echo "<td>".$row["car_make"]."</td>";
-        echo "<td>".$row["car_model"]."</td>";
-        echo "<td>".$row["car_year"]."</td>";
-        echo "</tr>";
-	}
+    if ($result->num_rows > 0) { 
+        echo "<table>"; 
+        while ($row = $result->fetch_assoc()) { 
+            echo "<tr>"; 
+            echo "<td>".$row["id"]."</td>"; 
+            echo "<td>".$row["name"]."</td>"; 
+            echo "<td>".$row["email"]."</td>"; 
+            echo "<td>".$row["phone_num"]."</td>"; 
+            echo "<td>".$row["city"]."</td>"; 
+            echo "<td>".$row["state"]."</td>";
+            echo "<td>".$row["preferred_contact"]."</td>"; 
+            echo "<td>".$row["car_make"]."</td>"; 
+            echo "<td>".$row["car_model"]."</td>"; 
+            echo "<td>".$row["car_year"]."</td>"; 
+            echo "</tr>"; 
+        } 
+        echo "</table";
+    } else {
+        echo "No results found";
+    }
+} else {
+    echo "No new record found";
 }
+
+
+
 ?>
