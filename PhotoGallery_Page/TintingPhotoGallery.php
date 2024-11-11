@@ -148,4 +148,34 @@
             </nav>
         </header>
     </div>
+
+    <div class ="container1">  
+            <section class="section-center-boarder-top">
+                <h1>TINTING PHOTO GALLERY</h1>
+            </section>
+    </div>
+
+    <div class ="container2">
+        <section class="section-center">                
+            <img src="pg1.jpg" alt="IMAGE_1">
+            <img src="pg2.jpg" alt="IMAGE_2">
+            <img src="pg3.jpg" alt="IMAGE_3">
+            <img src="pg4.jpg" alt="IMAGE_4">
+            <img src="pg5.jpg" alt="IMAGE_5">
+            <img src="pg6.jpg" alt="IMAGE_6">
+            <img src="pg7.jpg" alt="IMAGE_7">
+            <img src="pg8.jpg" alt="IMAGE_8">
+            <img src="pg9.jpg" alt="IMAGE_9">
+            <img src="pg10.jpg" alt="IMAGE_10">
+            <img src="pg11.jpg" alt="IMAGE_11">
+            <img src="pg12.jpg" alt="IMAGE_12">
+            <img src="pg13.jpg" alt="IMAGE_13">
+            <img src="pg14.jpg" alt="IMAGE_14">
+            <img src="pg15.jpg" alt="IMAGE_15">
+            <img src="pg16.jpg" alt="IMAGE_16">
+            <img src="pg17.jpg" alt="IMAGE_17">
+        </section>
+    </div>
+
+
 </body>
