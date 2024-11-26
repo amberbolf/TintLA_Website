@@ -147,7 +147,7 @@
                 deterioration of interiors, sun glare reduction, heat rejection and privacy.</p>
 
                 
-            <a href="/TintLA_Website/ContactUs_Page/ContactUs.php" class="button"> Get A Quote </a>
+            <a href="/TintLA_Website/QuoteTool_Page/quote_tool.php" class="button"> Get A Quote </a>
             </section>
 
             <section class="section-center">
