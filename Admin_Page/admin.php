@@ -83,6 +83,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         <p>Select an action below:</p>
         <button class="button" onclick="location.href='editPricing.php';">Edit Pricing</button>
         <button class="button" onclick="location.href='viewQuotes.php';">View Quotes</button>
+        <button class="button" onclick="location.href='viewContacts.php';">View Contact Us Inquiries</button>
     </div>
 </body>
 </html>
