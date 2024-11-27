@@ -52,7 +52,7 @@
         }
         nav ul li {
             display: inline;
-            margin: 0 15px;
+            margin: 0 45px;
         }
         nav ul li a {
             color: black;
@@ -94,9 +94,17 @@
         .section-right {
             text-align: right;
         }
+        .quote-price {
+            text-align: center;
+            border: 2px solid #0F49B8; 
+            padding: 20px;
+            font-weight: bold; 
+            font-size: 80px; 
+            border-radius: 5px; 
+            box-shadow: 0 3px #999;
+        }
         /**/
-
-        /* CSS */
+        
         .button-1 {
         background-color: #0F49B8;
         border-radius: 8px;
@@ -105,10 +113,10 @@
         color: #FFFFFF;
         cursor: pointer;
         display: inline-block;
-        font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+        height: 60px;
+        width: 150px;
         line-height: 20px;
         list-style: none;
         margin: 0;
@@ -126,34 +134,12 @@
 
         .button-1:hover,
         .button-1:focus {
-        background-color: #F082AC;
+        background-color: #999;
         }
         .button-wrapper {
-    text-align: center; /* Centers the button horizontally */
-    margin-top: 20px;   /* Optional: Adds some spacing above the button */
+        text-align: center;
+        margin-top: 20px;
 }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            fontsize: 16px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            outline: none;
-            color: #fff;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px #999;
-        }
-        .button:hover{
-            background-color: 3e8341
-        }
-        .button:active{
-            background-color: #3e8341;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
 
         footer{
             background-color: #333;
@@ -206,12 +192,12 @@
         
         
             <section class="section-center">
-                <h2 style= "color:white">Get A Quick Quote</h2>
+                <h2 style= "color:white">GET A QUICK QUOTE</h2>
 
                 <hr style="width:80%;">
 
                 <br>
-                <p style= "color:white">To get a quick quote for Automotive tinting, fill out your <br>
+                <p style= "font-size: 18px; color:white">To get a quick quote for Automotive tinting, fill out your <br>
                 information below. <br><br><br>
                 To get a quote for Commercial or Residential tinting, please visit <br>
                 the Contact Us page. <br></p>
@@ -278,7 +264,16 @@
                     </select> <br><br>
 
                     <div class="button-wrapper">
-                    <button class="button-1" role="button">Submit</button>
+                    <button style="box-shadow: 0 4px #999;" class="button-1" role="button">Submit</button>
+                    <br>
+
+                    <h2 style="font-weight: bold; margin-top: 70px;">Your Quoting Information</h2>
+                    <section class="quote-price">
+                        <!--this is where we can add the text for whatever the quote price is-->
+                        <p>
+                            $
+                        </p>
+                    </section>
                     </div>
 
                 </form>
@@ -288,12 +283,31 @@
 
         </div>    
         </main>
-        
+    </div>  
+    <div class="container1">
+        <header style="background-color: #0F49B8; color: white;">
+            <div class = "logo">
+                <a href="/TintLA_Website/Home_Page/Home.php">
+                    <img src="tintla_logo.png" alt="Tintla_logo">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                <li><a style="color:white;"href="/TintLA_Website/Automotive_Page/AutomotiveTinting.php">Automotive Tinting</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/Commercial_Page/CommercialTinting.php">Commercial Tinting</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/Residential_Page/ResidentialTinting.php">Residential Tinting</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/TintworkFilm_Page/TintworkFilm.php">Tintwork Film</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/PhotoGallery_Page/TintingPhotoGallery.php">Tinting Photo Gallery</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/ContactUs_Page/ContactUs.php">Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
+
         <footer>
-            <p>&copy; Now serving Los Angeles and all the surrounding suburbs. Give us a call at 626.548.4683 (San Gabriel Valley) or 818.200.6657 (San Fernando Valley or Los Angeles) to schedule your appointment now.
+            <p style="padding: 10px;">&copy; Now serving Los Angeles and all the surrounding suburbs. Give us a call at 626.548.4683 (San Gabriel Valley) or 818.200.6657 (San Fernando Valley or Los Angeles) to schedule your appointment now.
             Same day service, quality work, we tint any make and model of vehicle and only the best quality in film brands with a lifetime warranty.</p>
         </footer>
-    </div>    
+    </div>      
 </body>
 
 

@@ -28,8 +28,8 @@
             margin: 0 auto;
         }
         header {
-            background-color: #333;
-            color: white;
+            background-color: white;
+            color: black;
             padding: 10px 0;
             display: flex;
             align-items: center;
@@ -46,10 +46,11 @@
         }
         nav ul li {
             display: inline;
-            margin: 0 15px;
+            margin: 0 45px;
         }
         nav ul li a {
-            color: white;
+            color: black;
+            font-weight: bold;
             text-decoration: none;
         }
         nav ul li a:hover {
@@ -82,9 +83,11 @@
             padding: 10px;
         }
         .section-center-boarder-top {
+            border: 5px solid #333;
             text-align: center;
             margin-bottom: 40px;
-            border: 5px solid #ddd; 
+            background-color: #0F49B8;
+            color: white;
             padding: 10px;
         }
         .section-right {
@@ -128,6 +131,10 @@
 </head>
 
 <body>
+    <div style="padding-left: 10px; padding-right: 10px; display: flex; justify-content: space-between; background-color: #0F49B8">
+    <p style="font-size:small; flex-basis: 49.5%; color: white;">San Fernando Valley 818-200-6657 | San Gabriel Valley 626-548-4683</p>
+    <a style="text-decoration: none; padding-top: 12px; font-size:small; flex-basis: 49.5%; color: white; text-align: right;" href="https://www.facebook.com/shoptintla/">Check Out Our Facebook!</a>
+    </div>
     <div class="container1">
         <header>
             <div class = "logo">
@@ -143,7 +150,6 @@
                 <li><a href="/TintLA_Website/TintworkFilm_Page/TintworkFilm.php">Tintwork Film</a></li> 
                 <li><a href="/TintLA_Website/PhotoGallery_Page/TintingPhotoGallery.php">Tinting Photo Gallery</a></li> 
                 <li><a href="/TintLA_Website/ContactUs_Page/ContactUs.php">Contact Us</a></li>
-                >Facebook Link<
                 </ul>
             </nav>
         </header>
@@ -152,6 +158,7 @@
     <div class ="container1">  
             <section class="section-center-boarder-top">
                 <h1>RESIDENTIAL TINTING</h1>
+                <hr style="width: 80%">
             </section>
     </div>
 
@@ -193,4 +200,28 @@
             <p>Add Outlook Window Tinting Services is our sister company that specializes in Commercial and Residential window tinting. Please visit their website directly for more information and choices of window films for your home.</p>
         </section>
     </div>
+    <div class="container1">
+        <header style="background-color: #0F49B8; color: white;">
+            <div class = "logo">
+                <a href="/TintLA_Website/Home_Page/Home.php">
+                    <img src="tintla_logo.png" alt="Tintla_logo">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                <li><a style="color:white;"href="/TintLA_Website/Automotive_Page/AutomotiveTinting.php">Automotive Tinting</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/Commercial_Page/CommercialTinting.php">Commercial Tinting</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/Residential_Page/ResidentialTinting.php">Residential Tinting</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/TintworkFilm_Page/TintworkFilm.php">Tintwork Film</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/PhotoGallery_Page/TintingPhotoGallery.php">Tinting Photo Gallery</a></li> 
+                <li><a style="color:white;"href="/TintLA_Website/ContactUs_Page/ContactUs.php">Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <footer>
+            <p style="padding: 10px;">&copy; Now serving Los Angeles and all the surrounding suburbs. Give us a call at 626.548.4683 (San Gabriel Valley) or 818.200.6657 (San Fernando Valley or Los Angeles) to schedule your appointment now.
+            Same day service, quality work, we tint any make and model of vehicle and only the best quality in film brands with a lifetime warranty.</p>
+        </footer>
+    </div>    
 </body>
