@@ -219,8 +219,8 @@
         <div class ="container2">
             <div class="container1">
             <section class="section-left-boarder">
-                <form action="ContactUs.php" method="post">
-                    <label for="first name"><b>First Name:</b></label> <br>
+                <form action="quote_tool.php" method="post">
+                    <label for="first_name"><b>First Name:</b></label> <br>
                     <input type="text" id="first_name" name="first_name" style=" margin-top: 10px; border:2px solid #0F49B8;border-radius: 5px; height: 25px;" maxlength="50" size="70" required><br><br>
 
                     <label id="last_name" for="last name"><b>Last Name:</b></label> <br>
@@ -235,7 +235,7 @@
                     <label for="car_make"><b>Car Make:</b></label><br>
 
                     <!--for right now this is hardcoded options-->
-                    <select style = "border: 2px solid #0F49B8;" name="car_makes" id="car_makes">
+                    <select style = "border: 2px solid #0F49B8;" name="car_make" id="car_make">
                         <option disabled selected value> Select an option </option>
                         <option value="acura">Acura</option>
                         <option value="audi">Audi</option>
@@ -244,7 +244,7 @@
                     <label for="car_model"><b>Car Model:</b></label> 
                     <br>
                     <!--for right now this is hardcoded options-->
-                    <select style = "border: 2px solid #0F49B8;" name="car_models" id="car_models">
+                    <select style = "border: 2px solid #0F49B8;" name="car_model" id="car_model">
                         <option disabled selected value> Select an option </option>
                         <option value="mdx9">MDX (9)</option>
                         <option value="mdx7">MDX (7)</option>
@@ -253,8 +253,9 @@
 
                     <label for="car_year"><b>Car Year:</b></label> <br>
                     <!--for right now this is hardcoded options, maybe keep hardcoded???-->
-                    <select style = "border: 2px solid #0F49B8;" name="car_years" id="car_years">
+                    <select style = "border: 2px solid #0F49B8;" name="car_year" id="car_year">
                         <option disabled selected value> Select an option </option>
+                        <option value=""></option>
                         <option value="2010">2010</option>
                         <option value="2011">2011</option>
                         <option value="2012">2012</option>
@@ -262,7 +263,7 @@
 
                     <label for="tint_type"><b>Tint Type:</b></label> <br>
                     <!--for right now this is hardcoded options, maybe keep hardcoded???-->
-                    <select style = "border: 2px solid #0F49B8;" name="tint_types" id="tint_types">
+                    <select style = "border: 2px solid #0F49B8;" name="tint_type" id="tint_type">
                         <option disabled selected value> Select an option </option>
                         <option value="carbon">Carbon</option>
                         <option value="ceramic">Ceramic</option>
@@ -287,5 +288,69 @@
     </div>    
 </body>
 
+
+<?php
+
+// tintla_database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$databaseName="tintla_database";
+
+$conn = new mysqli(hostname: $servername, username: $username, password: $password, database: $databaseName);
+
+// checks connection
+if ($conn->connect_error) {
+	die("connection failed". $conn->connect_error);
+}
+echo "Connected<br>";
+
+// handles form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // retrieves form data
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
+    $email = $_POST['email'];
+    $phone_num = $_POST['phone_num'];
+    $car_make = $_POST['car_make'];
+    $car_model = $_POST['car_model'];
+    $car_year = $_POST['car_year'];
+    $tint_type = $_POST['tint_type'];
+
+    // data into database
+    $sql = "INSERT INTO customers (first_name, last_name, email, phone_num, car_make, car_model, car_year, tint_type) 
+            VALUES ('$first_name', '$last_name', '$email', '$phone_num', '$car_make', '$car_model', '$car_year', '$tint_type')";
+
+
+     if ($conn->query($sql) === TRUE) {
+        echo "New record created successfully<br>";
+
+        // outputs price from auto table based on user input
+        if ($tint_type == "carbon") {
+            $query = "SELECT price_carbon AS price FROM auto 
+                      WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+        } else if ($tint_type == "ceramic") {
+            $query = "SELECT price_ceramic AS price FROM auto 
+                      WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+        }
+
+        $result = $conn->query($query);
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "The price for $tint_type tinting is: $" . $row["price"];
+            }
+        } else {
+            echo "No matching record found in the auto table.";
+        }
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Close connection
+//$conn->close();
+
+?>
 
 </html>
