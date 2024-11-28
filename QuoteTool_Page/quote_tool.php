@@ -317,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $car_year = $_POST['car_year'];
     $tint_type = $_POST['tint_type'];
 
-    // data into database
+    // data into customers table
     $sql = "INSERT INTO customers (first_name, last_name, email, phone_num, car_make, car_model, car_year, tint_type) 
             VALUES ('$first_name', '$last_name', '$email', '$phone_num', '$car_make', '$car_model', '$car_year', '$tint_type')";
 
