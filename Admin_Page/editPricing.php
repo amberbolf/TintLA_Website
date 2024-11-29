@@ -5,34 +5,34 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit();
 }
 
-// tintla_database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$databaseName="tintla_database";
+// Database connection
+$host = "localhost"; // Replace with your database host
+$username = "root";  // Replace with your database username
+$password = "";      // Replace with your database password
+$dbname = "tintla_database"; // Replace with your database name
 
-$conn = new mysqli(hostname: $servername, username: $username, password: $password, database: $databaseName);
+$conn = new mysqli($host, $username, $password, $dbname);
 
-// checks connection
+// Check connection
 if ($conn->connect_error) {
-    die("connection failed". $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
 // Fetch distinct makes and models first
-$makes = $conn->query("SELECT DISTINCT make FROM vehicles WHERE make IS NOT NULL ORDER BY make ASC");
+$makes = $conn->query("SELECT DISTINCT car_make FROM auto WHERE car_make IS NOT NULL ORDER BY car_make ASC");
 $models = null;
 $years = null;
 
 // Fetch models based on selected make
-if (isset($_POST['make']) && $_POST['make'] !== "") {
-    $make = $_POST['make'];
-    $models = $conn->query("SELECT DISTINCT model FROM vehicles WHERE make = '$make' AND model IS NOT NULL ORDER BY model ASC");
+if (isset($_POST['car_make']) && $_POST['car_make'] !== "") {
+    $make = $_POST['car_make'];
+    $models = $conn->query("SELECT DISTINCT car_model FROM auto WHERE car_make = '$make' AND car_model IS NOT NULL ORDER BY car_model ASC");
 }
 
 // Fetch years based on selected make and model
-if (isset($_POST['model']) && $_POST['model'] !== "") {
-    $model = $_POST['model'];
-    $years = $conn->query("SELECT DISTINCT year FROM vehicles WHERE make = '$make' AND model = '$model' AND year IS NOT NULL ORDER BY year DESC");
+if (isset($_POST['car_model']) && $_POST['car_model'] !== "") {
+    $model = $_POST['car_model'];
+    $years = $conn->query("SELECT DISTINCT car_year FROM auto WHERE car_make = '$make' AND car_model = '$model' AND car_year IS NOT NULL ORDER BY year DESC");
 }
 
 // Handle form submission for updating price
@@ -44,9 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_type'])) {
     // Prepare and validate input fields based on selected type
     $prices = [];
     if ($update_type === "carbon" || $update_type === "both") {
-        $prices['carbon_full'] = $_POST['carbon_full'] ?? null;
-        $prices['carbon_front'] = $_POST['carbon_front'] ?? null;
-        $prices['carbon_back'] = $_POST['carbon_back'] ?? null;
+        $prices['price_carbon'] = $_POST['price_carbon'] ?? null;
+        $prices['front_carbon'] = $_POST['front_carbon'] ?? null;
+        $prices['back_carbon'] = $_POST['back_carbon'] ?? null;
 
         foreach ($prices as $key => $price) {
             if (!is_numeric($price)) {
@@ -56,9 +56,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_type'])) {
     }
 
     if ($update_type === "ceramic" || $update_type === "both") {
-        $prices['ceramic_full'] = $_POST['ceramic_full'] ?? null;
-        $prices['ceramic_front'] = $_POST['ceramic_front'] ?? null;
-        $prices['ceramic_back'] = $_POST['ceramic_back'] ?? null;
+        $prices['price_ceramic'] = $_POST['price_ceramic'] ?? null;
+        $prices['front_ceramic'] = $_POST['front_ceramic'] ?? null;
+        $prices['back_ceramic'] = $_POST['back_ceramic'] ?? null;
 
         foreach ($prices as $key => $price) {
             if (!is_numeric($price)) {
@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_type'])) {
         foreach ($prices as $type => $price) {
             if ($price !== null) {
                 $stmt = $conn->prepare(
-                    "UPDATE vehicles SET $type = ? WHERE make = ? AND model = ?" . ($year ? " AND year = ?" : "")
+                    "UPDATE auto SET $type = ? WHERE car_make = ? AND car_model = ?" . ($car_year ? " AND car_year = ?" : "")
                 );
                 if ($year) {
                     $stmt->bind_param("dsss", $price, $make, $model, $year);
@@ -97,11 +97,6 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
-<header>
-        <form action="admin.php" method="POST" style="margin: 0;">
-            <button class="home-button" type="submit">Back</button>
-        </form>
-    </header>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,6 +117,23 @@ $conn->close();
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
         }
         .form-group {
             margin-bottom: 15px;
@@ -160,6 +172,7 @@ $conn->close();
     </style>
 </head>
 <body>
+<a href="admin.php" class="back-button">← Back to Admin</a>
     <div class="container">
         <h1>Edit Pricing</h1>
         <form method="POST" action="">
