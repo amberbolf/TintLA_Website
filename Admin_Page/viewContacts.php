@@ -46,6 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+<header>
+        <form action="admin.php" method="POST" style="margin: 0;">
+            <button class="home-button" type="submit">Back</button>
+        </form>
+    </header>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
