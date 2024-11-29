@@ -205,7 +205,7 @@
         <div class ="container2">
             <div class="container1">
             <section class="section-left-boarder">
-                <form action="ContactUs.php" method="post">
+                <form action="quote_tool.php" method="post">
                     <label for="first name"><b>First Name:</b></label> <br>
                     <input type="text" id="first_name" name="first_name" style=" margin-top: 10px; border:2px solid #0F49B8;border-radius: 5px; height: 25px;" maxlength="50" size="70" required><br><br>
 
