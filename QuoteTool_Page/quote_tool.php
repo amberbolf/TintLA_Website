@@ -311,4 +311,67 @@
 </body>
 
 
+<?php
+
+// tintla_database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$databaseName="tintla_database";
+
+$conn = new mysqli(hostname: $servername, username: $username, password: $password, database: $databaseName);
+
+// checks connection
+if ($conn->connect_error) {
+	die("connection failed". $conn->connect_error);
+}
+echo "Connected<br>";
+
+// handles form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    // retrieves form data
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
+    $email = $_POST['email'];
+    $phone_num = $_POST['phone_num'];
+    $car_make = $_POST['car_make'];
+    $car_model = $_POST['car_model'];
+    $car_year = $_POST['car_year'];
+    $tint_type = $_POST['tint_type'];
+
+    // data into customers table
+    $sql = "INSERT INTO customers (first_name, last_name, email, phone_num, car_make, car_model, car_year, tint_type) 
+            VALUES ('$first_name', '$last_name', '$email', '$phone_num', '$car_make', '$car_model', '$car_year', '$tint_type')";
+
+
+    if ($conn->query($sql) === TRUE) {
+        echo "New record created successfully<br>";
+
+        // outputs price from auto table based on user input
+        if ($tint_type == "carbon") {
+            $query = "SELECT price_carbon AS price FROM auto 
+                      WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+        } else if ($tint_type == "ceramic") {
+            $query = "SELECT price_ceramic AS price FROM auto 
+                      WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+        }
+
+        $result = $conn->query($query);
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "The price for $tint_type tinting is: $" . $row["price"];
+            }
+        } else {
+            echo "No matching record found in the auto table.";
+        }
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+?>
+
+
 </html>
