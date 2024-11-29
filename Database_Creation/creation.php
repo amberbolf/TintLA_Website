@@ -29,8 +29,8 @@ $sql = "CREATE TABLE IF NOT EXISTS auto (
    car_year INT,
    car_make VARCHAR(50),
    car_model VARCHAR(50),
-   price_carbon FLOAT,
-   price_ceramic FLOAT,
+   full_carbon FLOAT,
+   full_ceramic FLOAT,
    front_carbon FLOAT,
    front_ceramic FLOAT,
    back_carbon FLOAT,
@@ -105,16 +105,16 @@ if (file_exists($csvFile)) {
        fgetcsv($handle);
 
        // Prepare insert statement
-       $stmt = $conn->prepare("INSERT INTO auto (car_year, car_make, car_model, price_carbon, price_ceramic, front_carbon, front_ceramic, back_carbon, back_ceramic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-       $stmt->bind_param("issdddddd", $car_year, $car_make, $car_model, $price_carbon, $price_ceramic, $front_carbon, $front_ceramic, $back_carbon, $back_ceramic);
+       $stmt = $conn->prepare("INSERT INTO auto (car_year, car_make, car_model, full_carbon, full_ceramic, front_carbon, front_ceramic, back_carbon, back_ceramic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+       $stmt->bind_param("issdddddd", $car_year, $car_make, $car_model, $full_carbon, $full_ceramic, $front_carbon, $front_ceramic, $back_carbon, $back_ceramic);
 
        while (($data = fgetcsv($handle)) !== FALSE) {
            // Assign values from CSV
            $car_year = (int)$data[0];
            $car_make = $data[1];
            $car_model = $data[2];
-           $price_carbon = (float)$data[3];
-           $price_ceramic = (float)$data[4];
+           $full_carbon = (float)$data[3];
+           $full_ceramic = (float)$data[4];
            $front_carbon = (float)$data[5];
            $front_ceramic = (float)$data[6];
            $back_carbon = (float)$data[7];

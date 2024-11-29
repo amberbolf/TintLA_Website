@@ -221,7 +221,7 @@
                     <label for="car_make"><b>Car Make:</b></label><br>
 
                     <!--for right now this is hardcoded options-->
-                    <select style = "border: 2px solid #0F49B8;" name="car_makes" id="car_makes" required>
+                    <select style = "border: 2px solid #0F49B8;" name="car_make" id="car_make" required>
                         <option disabled selected value> Select an option </option>
                         <option value="acura">Acura</option>
                         <option value="audi">Audi</option>
@@ -230,7 +230,7 @@
                     <label for="car_model"><b>Car Model:</b></label> 
                     <br>
                     <!--for right now this is hardcoded options-->
-                    <select style = "border: 2px solid #0F49B8;" name="car_models" id="car_models" required>
+                    <select style = "border: 2px solid #0F49B8;" name="car_model" id="car_model" required>
                         <option disabled selected value> Select an option </option>
                         <option value="mdx9">MDX (9)</option>
                         <option value="mdx7">MDX (7)</option>
@@ -239,7 +239,7 @@
 
                     <label for="car_year"><b>Car Year:</b></label> <br>
                     <!--for right now this is hardcoded options, maybe keep hardcoded???-->
-                    <select style = "border: 2px solid #0F49B8;" name="car_years" id="car_years">
+                    <select style = "border: 2px solid #0F49B8;" name="car_year" id="car_year">
                         <option disabled selected value> Select an option </option>
                         <option value="2010">2010</option>
                         <option value="2011">2011</option>
@@ -248,7 +248,7 @@
 
                     <label for="tint_type"><b>Tint Type:</b></label> <br>
                     <!--for right now this is hardcoded options, maybe keep hardcoded???-->
-                    <select style = "border: 2px solid #0F49B8;" name="tint_types" id="tint_types" required>
+                    <select style = "border: 2px solid #0F49B8;" name="tint_type" id="tint_type" required>
                         <option disabled selected value> Select an option </option>
                         <option value="carbon">Carbon</option>
                         <option value="ceramic">Ceramic</option>
@@ -256,9 +256,9 @@
 
                     <label for="tint_coverage"><b>Tint Coverage:</b></label> <br>
                     <!--for right now this is hardcoded options, maybe keep hardcoded???-->
-                    <select style = "border: 2px solid #0F49B8;" name="tint_coverages" id="tint_coverages" required>
+                    <select style = "border: 2px solid #0F49B8;" name="tint_coverage" id="tint_coverage" required>
                         <option disabled selected value> Select an option </option>
-                        <option value="full">Full</option>
+                        <option value="full_carbon">Full</option>
                         <option value="front">Front</option>
                         <option value="back">Back</option>
                     </select> <br><br>
