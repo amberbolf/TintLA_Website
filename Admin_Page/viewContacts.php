@@ -4,18 +4,20 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: adminLogin.php");
     exit();
 }
-// tintla_database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$databaseName="tintla_database";
+// Database configuration
+$host = 'localhost'; // Database host
+$dbname = 'tintla_database'; // Database name
+$username = 'root'; // Database username
+$password = ''; // Database password
 
-$conn = new mysqli(hostname: $servername, username: $username, password: $password, database: $databaseName);
-
-// checks connection
-if ($conn->connect_error) {
-    die("connection failed". $conn->connect_error);
+// Establish database connection
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
+
 // Initialize variables
 $search_term = '';
 $contacts = [];
@@ -28,29 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($search_term)) {
         if (is_numeric($search_term)) {
             // Search by phone number
-            $stmt = $pdo->prepare("SELECT * FROM contacts WHERE phone_number LIKE :search_term ORDER BY id DESC LIMIT 20");
+            $stmt = $pdo->prepare("SELECT * FROM inquiries WHERE phone_num LIKE :search_term ORDER BY inquiry_id DESC LIMIT 20");
             $stmt->execute(['search_term' => '%' . $search_term . '%']);
         } else {
             // Search by name (first or last)
-            $stmt = $pdo->prepare("SELECT * FROM contacts WHERE first_name LIKE :search_term OR last_name LIKE :search_term ORDER BY id DESC LIMIT 20");
+            $stmt = $pdo->prepare("SELECT * FROM inquiries WHERE first_name LIKE :search_term OR last_name LIKE :search_term ORDER BY inquiry_id DESC LIMIT 20");
             $stmt->execute(['search_term' => '%' . $search_term . '%']);
         }
         $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 } else {
     // Fetch the top 20 recent contacts
-    $stmt = $pdo->query("SELECT * FROM contacts ORDER BY id DESC LIMIT 20");
+    $stmt = $pdo->query("SELECT * FROM inquiries ORDER BY inquiry_id DESC LIMIT 20");
     $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<header>
-        <form action="admin.php" method="POST" style="margin: 0;">
-            <button class="home-button" type="submit">Back</button>
-        </form>
-    </header>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
