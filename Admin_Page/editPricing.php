@@ -5,17 +5,17 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit();
 }
 
-// Database connection
-$host = "localhost"; // Replace with your database host
-$username = "root";  // Replace with your database username
-$password = "";      // Replace with your database password
-$dbname = "vehicle_db"; // Replace with your database name
+// tintla_database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$databaseName="tintla_database";
 
-$conn = new mysqli($host, $username, $password, $dbname);
+$conn = new mysqli(hostname: $servername, username: $username, password: $password, database: $databaseName);
 
-// Check connection
+// checks connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("connection failed". $conn->connect_error);
 }
 
 // Fetch distinct makes and models first

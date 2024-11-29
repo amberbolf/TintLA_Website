@@ -4,18 +4,17 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: adminLogin.php");
     exit();
 }
-// Database configuration
-$host = 'localhost'; // Database host
-$dbname = 'quotes_db'; // Database name
-$username = 'root'; // Database username
-$password = ''; // Database password
+// tintla_database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$databaseName="tintla_database";
 
-// Establish database connection
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+$conn = new mysqli(hostname: $servername, username: $username, password: $password, database: $databaseName);
+
+// checks connection
+if ($conn->connect_error) {
+    die("connection failed". $conn->connect_error);
 }
 
 // Initialize variables
