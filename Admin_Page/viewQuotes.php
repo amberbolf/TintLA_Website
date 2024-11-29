@@ -4,17 +4,18 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: adminLogin.php");
     exit();
 }
-// tintla_database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$databaseName="tintla_database";
+// Database configuration
+$host = 'localhost'; // Database host
+$dbname = 'tintla_database'; // Database name
+$username = 'root'; // Database username
+$password = ''; // Database password
 
-$conn = new mysqli(hostname: $servername, username: $username, password: $password, database: $databaseName);
-
-// checks connection
-if ($conn->connect_error) {
-    die("connection failed". $conn->connect_error);
+// Establish database connection
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
 
 // Initialize variables
@@ -30,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate inputs
     if (!empty($first_name) && !empty($last_name)) {
         // Query the database for matching quotes
-        $stmt = $pdo->prepare("SELECT * FROM quotes WHERE first_name = :first_name AND last_name = :last_name");
+        $stmt = $pdo->prepare("SELECT * FROM customers WHERE first_name = :first_name AND last_name = :last_name");
         $stmt->execute(['first_name' => $first_name, 'last_name' => $last_name]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } else {
@@ -135,12 +136,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <tr>
                             <td><?= htmlspecialchars($row['first_name']) ?></td>
                             <td><?= htmlspecialchars($row['last_name']) ?></td>
-                            <td><?= htmlspecialchars($row['vehicle_year']) ?></td>
-                            <td><?= htmlspecialchars($row['vehicle_make']) ?></td>
-                            <td><?= htmlspecialchars($row['vehicle_model']) ?></td>
+                            <td><?= htmlspecialchars($row['car_year']) ?></td>
+                            <td><?= htmlspecialchars($row['car_make']) ?></td>
+                            <td><?= htmlspecialchars($row['car_model']) ?></td>
                             <td><?= htmlspecialchars($row['tint_type']) ?></td>
                             <td><?= htmlspecialchars($row['coverage_type']) ?></td>
-                            <td>$<?= htmlspecialchars(number_format($row['price'], 2)) ?></td>
+                            <td>$<?= htmlspecialchars(number_format($row['quoted_price'], 2)) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
