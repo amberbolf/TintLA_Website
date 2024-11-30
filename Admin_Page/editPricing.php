@@ -130,6 +130,23 @@ $conn->close();
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
         .form-group {
             margin-bottom: 15px;
         }
@@ -223,6 +240,7 @@ $conn->close();
     </script>
 </head>
 <body>
+<a href="admin.php" class="back-button">← Back to Admin</a>
     <div class="container">
         <h1>Edit Pricing</h1>
         <form method="POST" action="">
