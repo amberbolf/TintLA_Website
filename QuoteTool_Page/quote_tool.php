@@ -22,6 +22,10 @@ $carModelsQuery = $conn->query("SELECT DISTINCT car_model FROM auto");
 // grabs all of the car years from the database for the dropdown (could try and make this relational but we will see)
 $carYearsQuery = $conn->query("SELECT DISTINCT car_year FROM auto");
 
+// initialize variables
+$quoted_price = '';
+$query = '';
+
 // handles form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -34,37 +38,88 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $car_model = $_POST['car_model'];
     $car_year = $_POST['car_year'];
     $tint_type = $_POST['tint_type'];
+    $tint_coverage = $_POST['tint_coverage'];
 
     // data into customers table
-    $sql = "INSERT INTO customers (first_name, last_name, email, phone_num, car_make, car_model, car_year, tint_type) 
-            VALUES ('$first_name', '$last_name', '$email', '$phone_num', '$car_make', '$car_model', '$car_year', '$tint_type')";
+    $sql = "INSERT INTO customers (first_name, last_name, email, phone_num, car_make, car_model, car_year, tint_type, tint_coverage) 
+            VALUES ('$first_name', '$last_name', '$email', '$phone_num', '$car_make', '$car_model', '$car_year', '$tint_type', '$tint_coverage')";
 
 
     if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully<br>";
 
-        // outputs price from auto table based on user input
-        if ($tint_type == "carbon") {
-            $query = "SELECT price_carbon AS price FROM auto 
-                      WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
-        } else if ($tint_type == "ceramic") {
-            $query = "SELECT price_ceramic AS price FROM auto 
-                      WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+        // assigns price from auto table based on user input
+        switch (strtolower($tint_type)) {
+            case 'carbon':
+                switch (strtolower($tint_coverage)) {
+                    case 'full':
+                        $query = "SELECT full_carbon AS quoted_price FROM auto 
+                                  WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+                        break;
+                    case 'front':
+                        $query = "SELECT front_carbon AS quoted_price FROM auto 
+                                  WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+                        break;
+                    case 'back':
+                        $query = "SELECT back_carbon AS quoted_price FROM auto 
+                                  WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+                        break;
+                    default: 
+                        $query = ''; 
+                        break;
+                }
+                break;
+        
+            case 'ceramic':
+                switch (strtolower($tint_coverage)) {
+                    case 'full':
+                        $query = "SELECT full_ceramic AS quoted_price FROM auto 
+                                  WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+                        break;
+                    case 'front':
+                        $query = "SELECT front_ceramic AS quoted_price FROM auto 
+                                  WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+                        break;
+                    case 'back':
+                        $query = "SELECT back_ceramic AS quoted_price FROM auto 
+                                  WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
+                        break;
+                    default: 
+                    $query = ''; 
+                    break;
+                }
+                break;
+
+            default: 
+                $query = '';  
+                break;
         }
-
+        
         $result = $conn->query($query);
 
         if ($result->num_rows > 0) {
+
             while ($row = $result->fetch_assoc()) {
-                echo "The price for $tint_type tinting is: $" . $row["price"];
+                $quoted_price = $row["quoted_price"];
             }
+
+            // update customer record with their price
+            $updateSql = "UPDATE customers SET quoted_price='$quoted_price' 
+                WHERE first_name='$first_name' AND last_name='$last_name' AND email='$email' 
+                AND phone_num='$phone_num' AND car_make='$car_make' AND car_model='$car_model' 
+                AND car_year='$car_year' AND tint_type='$tint_type' AND tint_coverage='$tint_coverage'";
+
+            $conn->query($updateSql) === TRUE;
+
         } else {
-            echo "No matching record found in the auto table.";
+            $quoted_price = "No matching record found in the auto table.";
         }
+
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+
+$conn->close();
 
 ?>
 
@@ -209,7 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .button-wrapper {
         text-align: center;
         margin-top: 20px;
-}
+        }
 
         footer{
             background-color: #333;
@@ -220,11 +275,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         label {
         text-align: left; 
-    }
+        }
 
         input {
         width: 98%; 
-    }
+        }
         select {
             margin-top: 10px;
             width: 190px;
@@ -236,10 +291,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
+
     <div style="padding-left: 10px; padding-right: 10px; display: flex; justify-content: space-between; background-color: #0F49B8">
-  <p style="font-size:small; flex-basis: 49.5%; color: white;">San Fernando Valley 818-200-6657 | San Gabriel Valley 626-548-4683</p>
-  <a style="text-decoration: none; padding-top: 12px; font-size:small; flex-basis: 49.5%; color: white; text-align: right;" href="https://www.facebook.com/shoptintla/">Check Out Our Facebook!</a>
-</div>
+        <p style="font-size:small; flex-basis: 49.5%; color: white;">San Fernando Valley 818-200-6657 | San Gabriel Valley 626-548-4683</>
+        <a style="text-decoration: none; padding-top: 12px; font-size:small; flex-basis: 49.5%; color: white; text-align: right;" href="https://www.facebook.com/shoptintla/">Check Out Our Facebook!</a>
+    </div>
 
     <div class="container1">
         <header>
@@ -272,6 +328,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 To get a quote for Commercial or Residential tinting, please visit <br>
                 the Contact Us page. <br></p>
             </section>
+
         <div class ="container2">
             <div class="container1">
             <section class="section-left-boarder">
@@ -279,7 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="first name"><b>First Name:</b></label> <br>
                     <input type="text" id="first_name" name="first_name" style=" margin-top: 10px; border:2px solid #0F49B8;border-radius: 5px; height: 25px;" maxlength="50" size="70" required><br><br>
 
-                    <label id="last_name" for="last name"><b>Last Name:</b></label> <br>
+                    <label for="last_name" for="last name"><b>Last Name:</b></label> <br>
                     <input type="text" id="last_name" name="last_name" style=" margin-top: 10px; border:2px solid #0F49B8;border-radius: 5px; height: 25px;" maxlength="50" size="70" required><br><br>
 
                     <label for="email"><b>Email:</b></label> <br>
@@ -289,28 +346,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="text" id="phone_num" name="phone_num" style=" margin-top: 10px; border:2px solid #0F49B8;border-radius: 5px; height: 25px;" maxlength="50" size="70" required><br><br>
                     
                     <label for="car_make"><b>Car Make:</b></label><br>
-                    <form action = "quote_tool.php" method = "get">
                     
-                    <select style = "border: 2px solid #0F49B8;" name="car_makes" id="car_makes" required>
+                    <select style = "border: 2px solid #0F49B8;" name="car_make" id="car_make" required>
                         <option disabled selected value> Select an option </option>
                         <?php
-                        while($rows = $carMakesQuery->fetch_assoc())
-                        {
+                        while($rows = $carMakesQuery->fetch_assoc()){
                             $carMake = $rows['car_make'];
                             echo "<option value='$carMake'>$carMake</option>";
                         }
                         ?>
                     </select> <br><br>
-
-                    </form>
-                    <label for="car_model"><b>Car Model:</b></label> 
-                    <br>
+                  
+                    <label for="car_model"><b>Car Model:</b></label><br>
                     
-                    <select style = "border: 2px solid #0F49B8;" name="car_models" id="car_models" required>
+                    <select style = "border: 2px solid #0F49B8;" name="car_model" id="car_model" required>
                         <option disabled selected value> Select an option </option>
                         <?php
-                        while($rows = $carModelsQuery->fetch_assoc())
-                        {
+                        while($rows = $carModelsQuery->fetch_assoc()){
                             $carModel = $rows['car_model'];
                             echo "<option value='$carModel'>$carModel</option>";
                         }
@@ -318,12 +370,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </select> <br><br>
 
                     <label for="car_year"><b>Car Year:</b></label> <br>
-                    <!--for right now this is hardcoded options, maybe keep hardcoded???-->
-                    <select style = "border: 2px solid #0F49B8;" name="car_years" id="car_years">
+                    <select style = "border: 2px solid #0F49B8;" name="car_year" id="car_year">
                         <option disabled selected value> Select an option </option>
                         <?php
-                        while($rows = $carYearsQuery->fetch_assoc())
-                        {
+                        while($rows = $carYearsQuery->fetch_assoc()){
                             $carYear = $rows['car_year'];
                             echo "<option value='$carYear'>$carYear</option>";
                         }
@@ -331,16 +381,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </select> <br><br>
 
                     <label for="tint_type"><b>Tint Type:</b></label> <br>
-                    <!--for right now this is hardcoded options, maybe keep hardcoded???-->
-                    <select style = "border: 2px solid #0F49B8;" name="tint_types" id="tint_types" required>
+                    <select style = "border: 2px solid #0F49B8;" name="tint_type" id="tint_type" required>
                         <option disabled selected value> Select an option </option>
                         <option value="carbon">Carbon</option>
                         <option value="ceramic">Ceramic</option>
                     </select> <br><br>
 
                     <label for="tint_coverage"><b>Tint Coverage:</b></label> <br>
-                    <!--for right now this is hardcoded options, maybe keep hardcoded???-->
-                    <select style = "border: 2px solid #0F49B8;" name="tint_coverages" id="tint_coverages" required>
+                    <select style = "border: 2px solid #0F49B8;" name="tint_coverage" id="tint_coverage" required>
                         <option disabled selected value> Select an option </option>
                         <option value="full">Full</option>
                         <option value="front">Front</option>
@@ -348,19 +396,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </select> <br><br>
 
                     <div class="button-wrapper">
-                    <button style="box-shadow: 0 4px #999;" class="button-1" role="button">Submit</button>
-                    <br>
-
-                    <h2 style="font-weight: bold; margin-top: 70px;">Your Quoting Information</h2>
-                    <section class="quote-price">
-                        <!--this is where we can add the text for whatever the quote price is-->
-                        <p>
-                            $
-                        </p>
-                    </section>
+                    <button style="box-shadow: 0 4px #999;" class="button-1" role="button">Submit</button><br>
                     </div>
-
                 </form>
+
+                <h2 style="font-weight: bold; margin-top: 70px;">Your Quoting Information</h2>
+                <section class="quote-price">
+                    <p style="font-family: Arial, sans-serif; font-size: 28px; color: #333;">
+                        <?php echo @($car_make. " ".$car_model. " ". strtoupper($tint_coverage). " ". strtoupper($tint_type). " Tint: $" .$quoted_price); ?>
+                    </p>
+               </section>
+
             </section>
             </div>
         </div>    
@@ -393,7 +439,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </footer>
     </div>      
 </body>
-
-
 
 </html>
