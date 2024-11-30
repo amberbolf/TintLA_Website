@@ -17,10 +17,10 @@ if ($conn->connect_error) {
 $carMakesQuery = $conn->query("SELECT DISTINCT car_make FROM auto");
 
 // grabs all of the car models from the database for the dropdown (could try and make this relational but we will see)
-$carModelsQuery = $conn->query("SELECT DISTINCT car_model FROM auto ORDER BY car_model ASC");
+$carModelsQuery = $conn->query("SELECT DISTINCT car_model");
 
 // grabs all of the car years from the database for the dropdown (could try and make this relational but we will see)
-$carYearsQuery = $conn->query("SELECT DISTINCT car_year FROM auto ORDER BY car_year ASC");
+$carYearsQuery = $conn->query("SELECT DISTINCT car_year");
 
 // handles form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
