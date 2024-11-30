@@ -22,8 +22,8 @@ $carModelsQuery = $conn->query("SELECT DISTINCT car_model FROM auto");
 // grabs all of the car years from the database for the dropdown (could try and make this relational but we will see)
 $carYearsQuery = $conn->query("SELECT DISTINCT car_year FROM auto");
 
-// initialize quoting variables
-$price = '';
+// initialize variables
+$quoted_price = '';
 $query = '';
 
 // handles form submission
@@ -52,15 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             case 'carbon':
                 switch (strtolower($tint_coverage)) {
                     case 'full':
-                        $query = "SELECT full_carbon AS price FROM auto 
+                        $query = "SELECT full_carbon AS quoted_price FROM auto 
                                   WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
                         break;
                     case 'front':
-                        $query = "SELECT front_carbon AS price FROM auto 
+                        $query = "SELECT front_carbon AS quoted_price FROM auto 
                                   WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
                         break;
                     case 'back':
-                        $query = "SELECT back_carbon AS price FROM auto 
+                        $query = "SELECT back_carbon AS quoted_price FROM auto 
                                   WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
                         break;
                     default: 
@@ -72,15 +72,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             case 'ceramic':
                 switch (strtolower($tint_coverage)) {
                     case 'full':
-                        $query = "SELECT full_ceramic AS price FROM auto 
+                        $query = "SELECT full_ceramic AS quoted_price FROM auto 
                                   WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
                         break;
                     case 'front':
-                        $query = "SELECT front_ceramic AS price FROM auto 
+                        $query = "SELECT front_ceramic AS quoted_price FROM auto 
                                   WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
                         break;
                     case 'back':
-                        $query = "SELECT back_ceramic AS price FROM auto 
+                        $query = "SELECT back_ceramic AS quoted_price FROM auto 
                                   WHERE car_make='$car_make' AND car_model='$car_model' AND car_year='$car_year'";
                         break;
                     default: 
@@ -99,16 +99,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result->num_rows > 0) {
 
             while ($row = $result->fetch_assoc()) {
-                $price = $row["price"];
+                $quoted_price = $row["quoted_price"];
             }
 
-            // updates customers table with the price
-            $updateSql = "UPDATE customers SET price='$price' 
-                    WHERE first_name='$first_name' AND last_name='$last_name' AND email='$email' 
-                    AND phone_num='$phone_num' AND car_make='$car_make' AND car_model='$car_model' 
-                    AND car_year='$car_year' AND tint_type='$tint_type' AND tint_coverage='$tint_coverage'";
+            // update customer record with their price
+            $updateSql = "UPDATE customers SET quoted_price='$quoted_price' 
+                WHERE first_name='$first_name' AND last_name='$last_name' AND email='$email' 
+                AND phone_num='$phone_num' AND car_make='$car_make' AND car_model='$car_model' 
+                AND car_year='$car_year' AND tint_type='$tint_type' AND tint_coverage='$tint_coverage'";
+
+            $conn->query($updateSql) === TRUE;
+
         } else {
-            $price = "No matching record found in the auto table.";
+            $quoted_price = "No matching record found in the auto table.";
         }
 
     } else {
@@ -400,8 +403,7 @@ $conn->close();
                 <h2 style="font-weight: bold; margin-top: 70px;">Your Quoting Information</h2>
                 <section class="quote-price">
                     <p style="font-family: Arial, sans-serif; font-size: 28px; color: #333;">
-                        <?php echo $car_make. " ".$car_model. " ". strtoupper($tint_coverage). " ". strtoupper($tint_type). " Tint: $" .$price; ?>
-
+                        <?php echo @($car_make. " ".$car_model. " ". strtoupper($tint_coverage). " ". strtoupper($tint_type). " Tint: $" .$quoted_price); ?>
                     </p>
                </section>
 
