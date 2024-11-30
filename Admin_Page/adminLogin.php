@@ -1,23 +1,66 @@
 <?php
 session_start();
 
-$valid_username = "admin";
-$valid_password = "password123";
+// Database connection settings
+$servername = "localhost";
+$username_db = "root"; // Change this to your database username
+$password_db = ""; // Change this to your database password
+$dbname = "tintla_database"; // Change this to your database name
+
+// Create a connection to the database
+$conn = new mysqli($servername, $username_db, $password_db, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Check if the credentials match
-    if ($username === $valid_username && $password === $valid_password) {
-        $_SESSION['loggedin'] = true;
-        header("Location: admin.php"); // Redirect to a admin page
-        exit();
+    // Prepare and execute SQL query to fetch the user
+    $stmt = $conn->prepare("SELECT password FROM admin WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->store_result();
+
+    // Check if the user exists
+    if ($stmt->num_rows > 0) {
+        // Fetch the password hash from the database
+        $stmt->bind_result($db_password);
+        $stmt->fetch();
+
+        // Verify the password
+        if (password_verify($password, $db_password)) {
+            // Check if the password needs to be rehashed
+            if (password_needs_rehash($db_password, PASSWORD_DEFAULT)) {
+                // Rehash the password and update it in the database
+                $new_hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                $update_stmt = $conn->prepare("UPDATE admin SET password = ? WHERE username = ?");
+                $update_stmt->bind_param("ss", $new_hashed_password, $username);
+                $update_stmt->execute();
+                $update_stmt->close();
+            }
+
+            // Set session variable for successful login
+            $_SESSION['loggedin'] = true;
+            header("Location: admin.php"); // Redirect to an admin page
+            exit();
+        } else {
+            $error_message = "Invalid username or password!";
+        }
     } else {
         $error_message = "Invalid username or password!";
     }
+
+    // Close the prepared statement
+    $stmt->close();
 }
+
+// Close the database connection
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -87,4 +130,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
-

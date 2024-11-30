@@ -81,9 +81,9 @@ if ($conn->query($sql) === TRUE) {
 
 // Create 'admin' table
 $sql = "CREATE TABLE IF NOT EXISTS admin (
-  admin_id INT PRIMARY KEY,
-  username VARCHAR(50),
-  password VARCHAR(255)
+  admin_id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL
 )";
 if ($conn->query($sql) === TRUE) {
   echo "Table 'admin' created successfully.<br>";
