@@ -6,7 +6,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 // Database configuration
 $host = 'localhost'; // Database host
-$dbname = 'contact_db'; // Database name
+$dbname = 'tintla_database'; // Database name
 $username = 'root'; // Database username
 $password = ''; // Database password
 
@@ -30,18 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($search_term)) {
         if (is_numeric($search_term)) {
             // Search by phone number
-            $stmt = $pdo->prepare("SELECT * FROM contacts WHERE phone_number LIKE :search_term ORDER BY id DESC LIMIT 20");
+            $stmt = $pdo->prepare("SELECT * FROM inquiries WHERE phone_num LIKE :search_term ORDER BY inquiry_id DESC LIMIT 20");
             $stmt->execute(['search_term' => '%' . $search_term . '%']);
         } else {
             // Search by name (first or last)
-            $stmt = $pdo->prepare("SELECT * FROM contacts WHERE first_name LIKE :search_term OR last_name LIKE :search_term ORDER BY id DESC LIMIT 20");
+            $stmt = $pdo->prepare("SELECT * FROM inquiries WHERE first_name LIKE :search_term OR last_name LIKE :search_term ORDER BY inquiry_id DESC LIMIT 20");
             $stmt->execute(['search_term' => '%' . $search_term . '%']);
         }
         $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 } else {
     // Fetch the top 20 recent contacts
-    $stmt = $pdo->query("SELECT * FROM contacts ORDER BY id DESC LIMIT 20");
+    $stmt = $pdo->query("SELECT * FROM inquiries ORDER BY inquiry_id DESC LIMIT 20");
     $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
@@ -66,6 +66,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
         }
         h1 {
             text-align: center;
@@ -105,6 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
+<a href="admin.php" class="back-button">← Back to Admin</a>
     <div class="container">
         <h1>Recent Contacts</h1>
 
@@ -122,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <th>Last Name</th>
                         <th>Phone Number</th>
                         <th>Email</th>
+                        <th>Date Submitted</th>
                         <th>Message</th>
                     </tr>
                 </thead>
@@ -130,9 +149,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <tr>
                             <td><?= htmlspecialchars($contact['first_name']) ?></td>
                             <td><?= htmlspecialchars($contact['last_name']) ?></td>
-                            <td><?= htmlspecialchars($contact['phone_number']) ?></td>
+                            <td><?= htmlspecialchars($contact['phone_num']) ?></td>
                             <td><?= htmlspecialchars($contact['email']) ?></td>
-                            <td><?= htmlspecialchars($contact['message']) ?></td>
+                            <td><?= htmlspecialchars($contact['date_submitted']) ?></td>
+                            <td><?= htmlspecialchars($contact['inquiry_message']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

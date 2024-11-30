@@ -6,7 +6,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 // Database configuration
 $host = 'localhost'; // Database host
-$dbname = 'quotes_db'; // Database name
+$dbname = 'tintla_database'; // Database name
 $username = 'root'; // Database username
 $password = ''; // Database password
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate inputs
     if (!empty($first_name) && !empty($last_name)) {
         // Query the database for matching quotes
-        $stmt = $pdo->prepare("SELECT * FROM quotes WHERE first_name = :first_name AND last_name = :last_name");
+        $stmt = $pdo->prepare("SELECT * FROM customers WHERE first_name = :first_name AND last_name = :last_name");
         $stmt->execute(['first_name' => $first_name, 'last_name' => $last_name]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } else {
@@ -42,6 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+<header>
+        <form action="admin.php" method="POST" style="margin: 0;">
+            <button class="home-button" type="submit">Back</button>
+        </form>
+    </header>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,6 +65,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
         }
         h1 {
             text-align: center;
@@ -101,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
+<a href="admin.php" class="back-button">← Back to Admin</a>
     <div class="container">
         <h1>View Quotes</h1>
         <form method="POST" action="">
@@ -136,12 +159,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <tr>
                             <td><?= htmlspecialchars($row['first_name']) ?></td>
                             <td><?= htmlspecialchars($row['last_name']) ?></td>
-                            <td><?= htmlspecialchars($row['vehicle_year']) ?></td>
-                            <td><?= htmlspecialchars($row['vehicle_make']) ?></td>
-                            <td><?= htmlspecialchars($row['vehicle_model']) ?></td>
+                            <td><?= htmlspecialchars($row['car_year']) ?></td>
+                            <td><?= htmlspecialchars($row['car_make']) ?></td>
+                            <td><?= htmlspecialchars($row['car_model']) ?></td>
                             <td><?= htmlspecialchars($row['tint_type']) ?></td>
                             <td><?= htmlspecialchars($row['coverage_type']) ?></td>
-                            <td>$<?= htmlspecialchars(number_format($row['price'], 2)) ?></td>
+                            <td>$<?= htmlspecialchars(number_format($row['quoted_price'], 2)) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

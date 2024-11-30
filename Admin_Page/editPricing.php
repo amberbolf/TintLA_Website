@@ -6,10 +6,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 
 // Database connection
-$host = "localhost"; // Replace with your database host
-$username = "root";  // Replace with your database username
-$password = "";      // Replace with your database password
-$dbname = "vehicle_db"; // Replace with your database name
+$host = "localhost";
+$username = "root";
+$password = "";
+$dbname = "tintla_database";
 
 $conn = new mysqli($host, $username, $password, $dbname);
 
@@ -18,76 +18,90 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch distinct makes and models first
-$makes = $conn->query("SELECT DISTINCT make FROM vehicles WHERE make IS NOT NULL ORDER BY make ASC");
-$models = null;
-$years = null;
+// Fetch distinct makes
+$makes = $conn->query("SELECT DISTINCT car_make FROM auto WHERE car_make IS NOT NULL ORDER BY car_make ASC");
 
-// Fetch models based on selected make
-if (isset($_POST['make']) && $_POST['make'] !== "") {
-    $make = $_POST['make'];
-    $models = $conn->query("SELECT DISTINCT model FROM vehicles WHERE make = '$make' AND model IS NOT NULL ORDER BY model ASC");
+// Handle AJAX requests for models and years
+if (isset($_GET['action']) && $_GET['action'] === 'get_models' && isset($_GET['make'])) {
+    $make = $conn->real_escape_string($_GET['make']);
+    $models = $conn->query("SELECT DISTINCT car_model FROM auto WHERE car_make = '$make' ORDER BY car_model ASC");
+    $model_options = [];
+    while ($row = $models->fetch_assoc()) {
+        $model_options[] = $row['car_model'];
+    }
+    echo json_encode($model_options);
+    exit();
 }
 
-// Fetch years based on selected make and model
-if (isset($_POST['model']) && $_POST['model'] !== "") {
-    $model = $_POST['model'];
-    $years = $conn->query("SELECT DISTINCT year FROM vehicles WHERE make = '$make' AND model = '$model' AND year IS NOT NULL ORDER BY year DESC");
+if (isset($_GET['action']) && $_GET['action'] === 'get_years' && isset($_GET['make'], $_GET['model'])) {
+    $make = $conn->real_escape_string($_GET['make']);
+    $model = $conn->real_escape_string($_GET['model']);
+    $years = $conn->query("SELECT DISTINCT car_year FROM auto WHERE car_make = '$make' AND car_model = '$model' ORDER BY car_year DESC");
+    $year_options = [];
+    while ($row = $years->fetch_assoc()) {
+        $year_options[] = $row['car_year'];
+    }
+    echo json_encode($year_options);
+    exit();
 }
 
-// Handle form submission for updating price
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_type'])) {
-    $update_type = $_POST['update_type']; // Carbon, Ceramic, or Both
-    $year = $_POST['year'] ?? null;
-    $success_message = $error_message = "";
+$error_message = "";
+$success_message = "";
 
-    // Prepare and validate input fields based on selected type
-    $prices = [];
-    if ($update_type === "carbon" || $update_type === "both") {
-        $prices['carbon_full'] = $_POST['carbon_full'] ?? null;
-        $prices['carbon_front'] = $_POST['carbon_front'] ?? null;
-        $prices['carbon_back'] = $_POST['carbon_back'] ?? null;
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $make = $_POST['car_make'] ?? '';
+    $model = $_POST['car_model'] ?? '';
+    $year = $_POST['car_year'] ?? '';
+    $update_type = $_POST['update_type'] ?? '';
+
+    // Validate inputs
+    if (!$make || !$model || !$year || !$update_type) {
+        $error_message = "Please ensure all fields (Make, Model, Year, and Update Type) are selected.";
+    } else {
+        $prices = [];
+
+        if ($update_type === "carbon" || $update_type === "both") {
+            $prices['price_carbon'] = $_POST['price_carbon'] ?? null;
+            $prices['front_carbon'] = $_POST['front_carbon'] ?? null;
+            $prices['back_carbon'] = $_POST['back_carbon'] ?? null;
+        }
+
+        if ($update_type === "ceramic" || $update_type === "both") {
+            $prices['price_ceramic'] = $_POST['price_ceramic'] ?? null;
+            $prices['front_ceramic'] = $_POST['front_ceramic'] ?? null;
+            $prices['back_ceramic'] = $_POST['back_ceramic'] ?? null;
+        }
 
         foreach ($prices as $key => $price) {
+            if ($price === null || $price === "") {
+                $error_message = "Please ensure all price fields are filled.";
+                break;
+            }
             if (!is_numeric($price)) {
-                $error_message = "Please enter valid numbers for carbon prices.";
+                $error_message = "Please enter valid numeric values for all prices.";
+                break;
             }
         }
-    }
 
-    if ($update_type === "ceramic" || $update_type === "both") {
-        $prices['ceramic_full'] = $_POST['ceramic_full'] ?? null;
-        $prices['ceramic_front'] = $_POST['ceramic_front'] ?? null;
-        $prices['ceramic_back'] = $_POST['ceramic_back'] ?? null;
-
-        foreach ($prices as $key => $price) {
-            if (!is_numeric($price)) {
-                $error_message = "Please enter valid numbers for ceramic prices.";
-            }
-        }
-    }
-
-    // If no errors, update the database
-    if (empty($error_message)) {
-        foreach ($prices as $type => $price) {
-            if ($price !== null) {
-                $stmt = $conn->prepare(
-                    "UPDATE vehicles SET $type = ? WHERE make = ? AND model = ?" . ($year ? " AND year = ?" : "")
-                );
-                if ($year) {
-                    $stmt->bind_param("dsss", $price, $make, $model, $year);
-                } else {
-                    $stmt->bind_param("dss", $price, $make, $model);
-                }
-
-                if (!$stmt->execute()) {
-                    $error_message = "Error updating price for $type: " . $conn->error;
-                }
-                $stmt->close();
-            }
-        }
         if (empty($error_message)) {
-            $success_message = "Prices updated successfully!";
+            foreach ($prices as $field => $price) {
+                if ($price !== null) {
+                    $query = "UPDATE auto SET $field = ? WHERE car_make = ? AND car_model = ? AND car_year = ?";
+                    $stmt = $conn->prepare($query);
+                    $stmt->bind_param("dsss", $price, $make, $model, $year);
+
+                    if (!$stmt->execute()) {
+                        $error_message = "Error updating price for $field: " . $conn->error;
+                        break;
+                    }
+                    $stmt->close();
+                }
+            }
+
+            if (empty($error_message)) {
+                $success_message = "Prices updated successfully!";
+            }
         }
     }
 }
@@ -106,8 +120,6 @@ $conn->close();
             background-color: blue;
             color: white;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
         }
         .container {
             max-width: 600px;
@@ -118,6 +130,23 @@ $conn->close();
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
         .form-group {
             margin-bottom: 15px;
         }
@@ -126,8 +155,7 @@ $conn->close();
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .form-group select,
-        .form-group input {
+        .form-group select, .form-group input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -142,6 +170,9 @@ $conn->close();
         .form-group input[type="submit"]:hover {
             background: darkblue;
         }
+        .price-fields {
+            display: none;
+        }
         .message {
             font-weight: bold;
             margin-top: 10px;
@@ -153,99 +184,136 @@ $conn->close();
             color: red;
         }
     </style>
+    <script>
+        function updateModels() {
+            const make = document.getElementById('car_make').value;
+            const modelDropdown = document.getElementById('car_model');
+            const yearDropdown = document.getElementById('car_year');
+            modelDropdown.innerHTML = '<option value="">Loading models...</option>';
+            yearDropdown.innerHTML = '<option value="">Select Model first</option>';
+            
+            if (make) {
+                fetch(`?action=get_models&make=${make}`)
+                    .then(response => response.json())
+                    .then(models => {
+                        modelDropdown.innerHTML = '<option value="">Select Model</option>';
+                        models.forEach(model => {
+                            modelDropdown.innerHTML += `<option value="${model}">${model}</option>`;
+                        });
+                    });
+            } else {
+                modelDropdown.innerHTML = '<option value="">Select Make first</option>';
+            }
+        }
+
+        function updateYears() {
+            const make = document.getElementById('car_make').value;
+            const model = document.getElementById('car_model').value;
+            const yearDropdown = document.getElementById('car_year');
+            yearDropdown.innerHTML = '<option value="">Loading years...</option>';
+
+            if (make && model) {
+                fetch(`?action=get_years&make=${make}&model=${model}`)
+                    .then(response => response.json())
+                    .then(years => {
+                        yearDropdown.innerHTML = '<option value="">Select Year or Other</option>';
+                        years.forEach(year => {
+                            yearDropdown.innerHTML += `<option value="${year}">${year}</option>`;
+                        });
+                    });
+            } else {
+                yearDropdown.innerHTML = '<option value="">Select Model first</option>';
+            }
+        }
+
+        function updatePriceFields() {
+            const type = document.getElementById('update_type').value;
+            document.querySelectorAll('.price-fields').forEach(fieldset => fieldset.style.display = 'none');
+
+            if (type === 'carbon' || type === 'both') {
+                document.getElementById('carbon-fields').style.display = 'block';
+            }
+            if (type === 'ceramic' || type === 'both') {
+                document.getElementById('ceramic-fields').style.display = 'block';
+            }
+        }
+    </script>
 </head>
 <body>
+<a href="admin.php" class="back-button">← Back to Admin</a>
     <div class="container">
         <h1>Edit Pricing</h1>
         <form method="POST" action="">
             <div class="form-group">
-                <label for="make">Vehicle Make:</label>
-                <select name="make" id="make" required onchange="this.form.submit()">
+                <label for="car_make">Vehicle Make:</label>
+                <select name="car_make" id="car_make" onchange="updateModels()" required>
                     <option value="">Select Make</option>
                     <?php while ($row = $makes->fetch_assoc()): ?>
-                        <option value="<?= $row['make'] ?>" <?= isset($make) && $make === $row['make'] ? 'selected' : '' ?>>
-                            <?= $row['make'] ?>
-                        </option>
+                        <option value="<?= $row['car_make'] ?>"><?= $row['car_make'] ?></option>
                     <?php endwhile; ?>
                 </select>
             </div>
-            
-            <?php if ($models): ?>
             <div class="form-group">
-                <label for="model">Vehicle Model:</label>
-                <select name="model" id="model" required onchange="this.form.submit()">
-                    <option value="">Select Model</option>
-                    <?php while ($row = $models->fetch_assoc()): ?>
-                        <option value="<?= $row['model'] ?>" <?= isset($model) && $model === $row['model'] ? 'selected' : '' ?>>
-                            <?= $row['model'] ?>
-                        </option>
-                    <?php endwhile; ?>
+                <label for="car_model">Vehicle Model:</label>
+                <select name="car_model" id="car_model" onchange="updateYears()" required>
+                    <option value="">Select Make first</option>
                 </select>
             </div>
-            <?php endif; ?>
-
-            <?php if ($years): ?>
             <div class="form-group">
-                <label for="year">Vehicle Year:</label>
-                <select name="year" id="year" required>
-                    <option value="">Select Year</option>
-                    <?php while ($row = $years->fetch_assoc()): ?>
-                        <option value="<?= $row['year'] ?>" <?= isset($year) && $year === $row['year'] ? 'selected' : '' ?>>
-                            <?= $row['year'] ?>
-                        </option>
-                    <?php endwhile; ?>
+                <label for="car_year">Vehicle Year:</label>
+                <select name="car_year" id="car_year" required>
+                    <option value="">Select Model first</option>
                 </select>
             </div>
-            <?php endif; ?>
-
             <div class="form-group">
                 <label for="update_type">Tint Type:</label>
-                <select name="update_type" id="update_type" required onchange="this.form.submit()">
+                <select name="update_type" id="update_type" onchange="updatePriceFields()" required>
                     <option value="">Select Type</option>
-                    <option value="carbon" <?= isset($update_type) && $update_type === "carbon" ? 'selected' : '' ?>>Carbon</option>
-                    <option value="ceramic" <?= isset($update_type) && $update_type === "ceramic" ? 'selected' : '' ?>>Ceramic</option>
-                    <option value="both" <?= isset($update_type) && $update_type === "both" ? 'selected' : '' ?>>Both</option>
+                    <option value="carbon">Carbon</option>
+                    <option value="ceramic">Ceramic</option>
+                    <option value="both">Both</option>
                 </select>
             </div>
 
-            <?php if (isset($update_type) && ($update_type === "carbon" || $update_type === "both")): ?>
+            <fieldset id="carbon-fields" class="price-fields">
+                <legend>Carbon Prices</legend>
                 <div class="form-group">
-                    <label for="carbon_full">New Price (Carbon Full):</label>
-                    <input type="text" name="carbon_full" id="carbon_full">
+                    <label for="price_carbon">Price (Carbon):</label>
+                    <input type="number" step="0.01" name="price_carbon" id="price_carbon" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="carbon_front">New Price (Carbon Front):</label>
-                    <input type="text" name="carbon_front" id="carbon_front">
+                    <label for="front_carbon">Front Price (Carbon):</label>
+                    <input type="number" step="0.01" name="front_carbon" id="front_carbon" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="carbon_back">New Price (Carbon Back):</label>
-                    <input type="text" name="carbon_back" id="carbon_back">
+                    <label for="back_carbon">Back Price (Carbon):</label>
+                    <input type="number" step="0.01" name="back_carbon" id="back_carbon" min="0">
                 </div>
-            <?php endif; ?>
+            </fieldset>
 
-            <?php if (isset($update_type) && ($update_type === "ceramic" || $update_type === "both")): ?>
+            <fieldset id="ceramic-fields" class="price-fields">
+                <legend>Ceramic Prices</legend>
                 <div class="form-group">
-                    <label for="ceramic_full">New Price (Ceramic Full):</label>
-                    <input type="text" name="ceramic_full" id="ceramic_full">
+                    <label for="price_ceramic">Price (Ceramic):</label>
+                    <input type="number" step="0.01" name="price_ceramic" id="price_ceramic" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="ceramic_front">New Price (Ceramic Front):</label>
-                    <input type="text" name="ceramic_front" id="ceramic_front">
+                    <label for="front_ceramic">Front Price (Ceramic):</label>
+                    <input type="number" step="0.01" name="front_ceramic" id="front_ceramic" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="ceramic_back">New Price (Ceramic Back):</label>
-                    <input type="text" name="ceramic_back" id="ceramic_back">
+                    <label for="back_ceramic">Back Price (Ceramic):</label>
+                    <input type="number" step="0.01" name="back_ceramic" id="back_ceramic" min="0">
                 </div>
-            <?php endif; ?>
+            </fieldset>
 
             <div class="form-group">
-                <input type="submit" value="Update Price">
+                <input type="submit" value="Update Pricing">
             </div>
         </form>
-
-        <?php if (isset($success_message)): ?>
+        <?php if ($success_message): ?>
             <p class="message success"><?= $success_message ?></p>
-        <?php elseif (isset($error_message)): ?>
+        <?php elseif ($error_message): ?>
             <p class="message error"><?= $error_message ?></p>
         <?php endif; ?>
     </div>
