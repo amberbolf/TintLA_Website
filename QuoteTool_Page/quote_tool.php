@@ -97,9 +97,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $result = $conn->query($query);
 
         if ($result->num_rows > 0) {
+
             while ($row = $result->fetch_assoc()) {
                 $price = $row["price"];
             }
+
+            // updates customers table with the price
+            $updateSql = "UPDATE customers SET price='$price' 
+                    WHERE first_name='$first_name' AND last_name='$last_name' AND email='$email' 
+                    AND phone_num='$phone_num' AND car_make='$car_make' AND car_model='$car_model' 
+                    AND car_year='$car_year' AND tint_type='$tint_type' AND tint_coverage='$tint_coverage'";
         } else {
             $price = "No matching record found in the auto table.";
         }
@@ -394,6 +401,7 @@ $conn->close();
                 <section class="quote-price">
                     <p style="font-family: Arial, sans-serif; font-size: 28px; color: #333;">
                         <?php echo $car_make. " ".$car_model. " ". strtoupper($tint_coverage). " ". strtoupper($tint_type). " Tint: $" .$price; ?>
+
                     </p>
                </section>
 
