@@ -17,10 +17,10 @@ if ($conn->connect_error) {
 $carMakesQuery = $conn->query("SELECT DISTINCT car_make FROM auto");
 
 // grabs all of the car models from the database for the dropdown (could try and make this relational but we will see)
-$carModelsQuery = $conn->query("SELECT DISTINCT car_model FROM auto");
+$carModelsQuery = $conn->query("SELECT DISTINCT car_model FROM auto ORDER BY car_model ASC");
 
 // grabs all of the car years from the database for the dropdown (could try and make this relational but we will see)
-$carYearsQuery = $conn->query("SELECT DISTINCT car_year FROM auto");
+$carYearsQuery = $conn->query("SELECT DISTINCT car_year FROM auto ORDER BY car_year ASC");
 
 // handles form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -73,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>TintLA</title>
     
     <style>
@@ -289,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="text" id="phone_num" name="phone_num" style=" margin-top: 10px; border:2px solid #0F49B8;border-radius: 5px; height: 25px;" maxlength="50" size="70" required><br><br>
                     
                     <label for="car_make"><b>Car Make:</b></label><br>
-                    <form action = "quote_tool.php" method = "get">
+                    
                     
                     <select style = "border: 2px solid #0F49B8;" name="car_makes" id="car_makes" required>
                         <option disabled selected value> Select an option </option>
@@ -302,7 +303,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                     </select> <br><br>
 
-                    </form>
+                    
                     <label for="car_model"><b>Car Model:</b></label> 
                     <br>
                     
