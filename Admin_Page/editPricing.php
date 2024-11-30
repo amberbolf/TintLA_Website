@@ -27,18 +27,20 @@ $years = null;
 if (isset($_POST['car_make']) && $_POST['car_make'] !== "") {
     $make = $_POST['car_make'];
     $models = $conn->query("SELECT DISTINCT car_model FROM auto WHERE car_make = '$make' AND car_model IS NOT NULL ORDER BY car_model ASC");
+    
 }
 
 // Fetch years based on selected make and model
-if (isset($_POST['car_model']) && $_POST['car_model'] !== "") {
+if (isset($_POST['car_model']) && $_POST['car_model'] !== "" ) {
     $model = $_POST['car_model'];
-    $years = $conn->query("SELECT DISTINCT car_year FROM auto WHERE car_make = '$make' AND car_model = '$model' AND car_year IS NOT NULL ORDER BY year DESC");
+    $years = $conn->query("SELECT DISTINCT car_year FROM auto WHERE car_make = '$make' AND car_model = '$model' AND car_year IS NOT NULL ORDER BY car_year DESC");
+    
 }
 
 // Handle form submission for updating price
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_type'])) {
     $update_type = $_POST['update_type']; // Carbon, Ceramic, or Both
-    $year = $_POST['year'] ?? null;
+    $year = $_POST['car_year'] ?? null;
     $success_message = $error_message = "";
 
     // Prepare and validate input fields based on selected type
@@ -63,13 +65,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_type'])) {
         foreach ($prices as $key => $price) {
             if (!is_numeric($price)) {
                 $error_message = "Please enter valid numbers for ceramic prices.";
+                echo "here 1";
             }
         }
     }
 
     // If no errors, update the database
-    if (empty($error_message)) {
+    if (empty($error_message) &&  ($update_type==='carbon' OR $update_type==='ceramic' OR $update_type==='both')) {
         foreach ($prices as $type => $price) {
+            echo "<br><br><br><br><br><br>here 2<br>";
             if ($price !== null) {
                 $stmt = $conn->prepare(
                     "UPDATE auto SET $type = ? WHERE car_make = ? AND car_model = ?" . ($car_year ? " AND car_year = ?" : "")
@@ -177,12 +181,12 @@ $conn->close();
         <h1>Edit Pricing</h1>
         <form method="POST" action="">
             <div class="form-group">
-                <label for="make">Vehicle Make:</label>
-                <select name="make" id="make" required onchange="this.form.submit()">
+                <label for="car_make">Vehicle Make:</label>
+                <select name="car_make" id="car_make" required onchange="this.form.submit()">
                     <option value="">Select Make</option>
                     <?php while ($row = $makes->fetch_assoc()): ?>
-                        <option value="<?= $row['make'] ?>" <?= isset($make) && $make === $row['make'] ? 'selected' : '' ?>>
-                            <?= $row['make'] ?>
+                        <option value="<?= $row['car_make'] ?>" <?= isset($make) && $make === $row['car_make'] ? 'selected' : '' ?>>
+                            <?= $row['car_make'] ?>
                         </option>
                     <?php endwhile; ?>
                 </select>
@@ -190,26 +194,26 @@ $conn->close();
             
             <?php if ($models): ?>
             <div class="form-group">
-                <label for="model">Vehicle Model:</label>
-                <select name="model" id="model" required onchange="this.form.submit()">
+                <label for="car_model">Vehicle Model:</label>
+                <select name="car_model" id="car_model" required onchange="this.form.submit()">
                     <option value="">Select Model</option>
                     <?php while ($row = $models->fetch_assoc()): ?>
-                        <option value="<?= $row['model'] ?>" <?= isset($model) && $model === $row['model'] ? 'selected' : '' ?>>
-                            <?= $row['model'] ?>
+                        <option value="<?= $row['car_model'] ?>" <?= isset($model) && $model === $row['car_model'] ? 'selected' : '' ?>>
+                            <?= $row['car_model'] ?>
                         </option>
                     <?php endwhile; ?>
                 </select>
             </div>
             <?php endif; ?>
 
-            <?php if ($years): ?>
+            <?php if ($years != "" OR $years != " " OR $years != NULL): ?>
             <div class="form-group">
-                <label for="year">Vehicle Year:</label>
-                <select name="year" id="year" required>
-                    <option value="">Select Year</option>
+                <label for="car_year">Vehicle Year:</label>
+                <select name="car_year" id="car_year" required>
+                    <option value="">Select Year or Other</option>
                     <?php while ($row = $years->fetch_assoc()): ?>
-                        <option value="<?= $row['year'] ?>" <?= isset($year) && $year === $row['year'] ? 'selected' : '' ?>>
-                            <?= $row['year'] ?>
+                        <option value="<?= $row['car_year'] ?>" <?= isset($year) && $year === $row['car_year'] ? 'selected' : '' ?>>
+                            <?= $row['car_year'] ?>
                         </option>
                     <?php endwhile; ?>
                 </select>
@@ -228,31 +232,31 @@ $conn->close();
 
             <?php if (isset($update_type) && ($update_type === "carbon" || $update_type === "both")): ?>
                 <div class="form-group">
-                    <label for="carbon_full">New Price (Carbon Full):</label>
-                    <input type="text" name="carbon_full" id="carbon_full">
+                    <label for="price_carbon">New Price (Carbon Full):</label>
+                    <input type="text" name="price_carbon" id="price_carbon">
                 </div>
                 <div class="form-group">
-                    <label for="carbon_front">New Price (Carbon Front):</label>
-                    <input type="text" name="carbon_front" id="carbon_front">
+                    <label for="front_carbon">New Price (Carbon Front):</label>
+                    <input type="text" name="front_carbon" id="front_carbon">
                 </div>
                 <div class="form-group">
-                    <label for="carbon_back">New Price (Carbon Back):</label>
-                    <input type="text" name="carbon_back" id="carbon_back">
+                    <label for="back_carbon">New Price (Carbon Back):</label>
+                    <input type="text" name="back_caron" id="back_carbon">
                 </div>
             <?php endif; ?>
 
             <?php if (isset($update_type) && ($update_type === "ceramic" || $update_type === "both")): ?>
                 <div class="form-group">
-                    <label for="ceramic_full">New Price (Ceramic Full):</label>
-                    <input type="text" name="ceramic_full" id="ceramic_full">
+                    <label for="price_ceramic">New Price (Ceramic Full):</label>
+                    <input type="text" name="price_ceramic" id="price_ceramic">
                 </div>
                 <div class="form-group">
-                    <label for="ceramic_front">New Price (Ceramic Front):</label>
-                    <input type="text" name="ceramic_front" id="ceramic_front">
+                    <label for="front_ceramic">New Price (Ceramic Front):</label>
+                    <input type="text" name="front_ceramic" id="front_ceramic">
                 </div>
                 <div class="form-group">
-                    <label for="ceramic_back">New Price (Ceramic Back):</label>
-                    <input type="text" name="ceramic_back" id="ceramic_back">
+                    <label for="back_ceramic">New Price (Ceramic Back):</label>
+                    <input type="text" name="back_ceramic" id="back_ceramic">
                 </div>
             <?php endif; ?>
 
