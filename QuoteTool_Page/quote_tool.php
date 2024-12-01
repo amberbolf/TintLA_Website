@@ -17,10 +17,10 @@ if ($conn->connect_error) {
 $carMakesQuery = $conn->query("SELECT DISTINCT car_make FROM auto");
 
 // grabs all of the car models from the database for the dropdown (could try and make this relational but we will see)
-$carModelsQuery = $conn->query("SELECT DISTINCT car_model FROM auto");
+$carModelsQuery = $conn->query("SELECT DISTINCT car_model FROM auto ORDER BY car_model ASC");
 
 // grabs all of the car years from the database for the dropdown (could try and make this relational but we will see)
-$carYearsQuery = $conn->query("SELECT DISTINCT car_year FROM auto");
+$carYearsQuery = $conn->query("SELECT DISTINCT car_year FROM auto ORDER BY car_year ASC");
 
 // initialize variables
 $quoted_price = '';
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $conn->query($updateSql) === TRUE;
 
         } else {
-            $quoted_price = "No matching record found in the auto table.";
+            $quoted_price = "Pricing Unavaliable. Please check that make and model are correct";
         }
 
     } else {
@@ -204,6 +204,7 @@ $conn->close();
             padding: 10px;
         }
         .section-center {
+            border: 5px solid #333;
             padding-top: 20px;
             padding-bottom: 20px;
             background-color: #0F49B8;
@@ -293,8 +294,8 @@ $conn->close();
 <body>
 
     <div style="padding-left: 10px; padding-right: 10px; display: flex; justify-content: space-between; background-color: #0F49B8">
-        <p style="font-size:small; flex-basis: 49.5%; color: white;">San Fernando Valley 818-200-6657 | San Gabriel Valley 626-548-4683</>
-        <a style="text-decoration: none; padding-top: 12px; font-size:small; flex-basis: 49.5%; color: white; text-align: right;" href="https://www.facebook.com/shoptintla/">Check Out Our Facebook!</a>
+    <p style="font-size:small; flex-basis: 49.5%; color: white;">San Fernando Valley 818-200-6657 | San Gabriel Valley 626-548-4683</p>
+    <a style="text-decoration: none; padding-top: 12px; font-size:small; flex-basis: 49.5%; color: white; text-align: right;" href="https://www.facebook.com/shoptintla/">Check Out Our Facebook!</a>
     </div>
 
     <div class="container1">

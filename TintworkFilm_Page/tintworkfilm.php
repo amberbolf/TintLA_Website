@@ -175,7 +175,7 @@
             <p>Tintwork brand films boast the best clarity giving you beyond HD vision.</p>
             <p>Value HP is the standard carbon film. It’s a great, economical choice offering a lifetime warranty against bubbling, peeling, and purpling. It also has 99% UV protection and between 30-45% heat rejection</p>
             <p>Fantasy IR is our high performance ceramic film. It’s an excellent choice for consumers looking for “name brand” films because it matches those high end film brand’s full warranty and high heat rejections. It blocks 99% of harmful UVA and UVB rays and 82% Infrared rejection which makes the ceramic choice at least 20% higher heat rejection versus the carbon.</p>
-            <p>Call us for details. //needs link//</p>
+            <p>Call us for details.</p>
         </section>
     </div>
 
