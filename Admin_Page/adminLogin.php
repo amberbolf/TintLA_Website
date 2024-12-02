@@ -3,9 +3,9 @@ session_start();
 
 // Database connection settings
 $servername = "localhost";
-$username_db = "root"; // Change this to your database username
-$password_db = ""; // Change this to your database password
-$dbname = "tintla_database"; // Change this to your database name
+$username_db = "root"; 
+$password_db = ""; 
+$dbname = "tintla_database"; 
 
 // Create a connection to the database
 $conn = new mysqli($servername, $username_db, $password_db, $dbname);
