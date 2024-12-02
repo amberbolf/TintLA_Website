@@ -62,13 +62,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $prices = [];
 
         if ($update_type === "carbon" || $update_type === "both") {
-            $prices['price_carbon'] = $_POST['price_carbon'] ?? null;
+            $prices['full_carbon'] = $_POST['full_carbon'] ?? null;
             $prices['front_carbon'] = $_POST['front_carbon'] ?? null;
             $prices['back_carbon'] = $_POST['back_carbon'] ?? null;
         }
 
         if ($update_type === "ceramic" || $update_type === "both") {
-            $prices['price_ceramic'] = $_POST['price_ceramic'] ?? null;
+            $prices['full_ceramic'] = $_POST['full_ceramic'] ?? null;
             $prices['front_ceramic'] = $_POST['front_ceramic'] ?? null;
             $prices['back_ceramic'] = $_POST['back_ceramic'] ?? null;
         }
@@ -278,8 +278,8 @@ $conn->close();
             <fieldset id="carbon-fields" class="price-fields">
                 <legend>Carbon Prices</legend>
                 <div class="form-group">
-                    <label for="price_carbon">Price (Carbon):</label>
-                    <input type="number" step="0.01" name="price_carbon" id="price_carbon" min="0">
+                    <label for="full_carbon">Price (Carbon):</label>
+                    <input type="number" step="0.01" name="full_carbon" id="full_carbon" min="0">
                 </div>
                 <div class="form-group">
                     <label for="front_carbon">Front Price (Carbon):</label>
@@ -294,8 +294,8 @@ $conn->close();
             <fieldset id="ceramic-fields" class="price-fields">
                 <legend>Ceramic Prices</legend>
                 <div class="form-group">
-                    <label for="price_ceramic">Price (Ceramic):</label>
-                    <input type="number" step="0.01" name="price_ceramic" id="price_ceramic" min="0">
+                    <label for="full_ceramic">Price (Ceramic):</label>
+                    <input type="number" step="0.01" name="full_ceramic" id="full_ceramic" min="0">
                 </div>
                 <div class="form-group">
                     <label for="front_ceramic">Front Price (Ceramic):</label>
