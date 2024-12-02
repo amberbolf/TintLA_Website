@@ -13,14 +13,34 @@ if ($conn->connect_error) {
 	die("connection failed". $conn->connect_error);
 }
 
-// grabs all of the car makes from the database for the dropdown
-$carMakesQuery = $conn->query("SELECT DISTINCT car_make FROM auto");
 
-// grabs all of the car models from the database for the dropdown (could try and make this relational but we will see)
-$carModelsQuery = $conn->query("SELECT DISTINCT car_model FROM auto ORDER BY car_model ASC");
+// Fetch distinct makes
+$makes = $conn->query("SELECT DISTINCT car_make FROM auto WHERE car_make IS NOT NULL ORDER BY car_make ASC");
 
-// grabs all of the car years from the database for the dropdown (could try and make this relational but we will see)
-$carYearsQuery = $conn->query("SELECT DISTINCT car_year FROM auto ORDER BY car_year ASC");
+// Handle AJAX requests for models and years
+if (isset($_GET['action']) && $_GET['action'] === 'get_models' && isset($_GET['make'])) {
+    $make = $conn->real_escape_string($_GET['make']);
+    $models = $conn->query("SELECT DISTINCT car_model FROM auto WHERE car_make = '$make' ORDER BY car_model ASC");
+    $model_options = [];
+    while ($row = $models->fetch_assoc()) {
+        $model_options[] = $row['car_model'];
+    }
+    echo json_encode($model_options);
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] === 'get_years' && isset($_GET['make'], $_GET['model'])) {
+    $make = $conn->real_escape_string($_GET['make']);
+    $model = $conn->real_escape_string($_GET['model']);
+    $years = $conn->query("SELECT DISTINCT car_year FROM auto WHERE car_make = '$make' AND car_model = '$model' ORDER BY car_year DESC");
+    $year_options = [];
+    while ($row = $years->fetch_assoc()) {
+        $year_options[] = $row['car_year'];
+    }
+    echo json_encode($year_options);
+    exit();
+}
+
 
 // initialize variables
 $quoted_price = '';
@@ -287,8 +307,74 @@ $conn->close();
             height: 30px;
             border-radius: 5px;
         }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group select, .form-group input {
+            margin-top: 10px;
+            width: 190px;
+            height: 30px;
+            border-radius: 5px;
+        }
+        .form-group input[type="submit"] {
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background: darkblue;
+        }
         
     </style>
+
+<script>
+        function updateModels() {
+            const make = document.getElementById('car_make').value;
+            const modelDropdown = document.getElementById('car_model');
+            const yearDropdown = document.getElementById('car_year');
+            modelDropdown.innerHTML = '<option value="">Loading models...</option>';
+            yearDropdown.innerHTML = '<option value="">Select Model first</option>';
+            
+            if (make) {
+                fetch(`?action=get_models&make=${make}`)
+                    .then(response => response.json())
+                    .then(models => {
+                        modelDropdown.innerHTML = '<option value="">Select Model</option>';
+                        models.forEach(model => {
+                            modelDropdown.innerHTML += `<option value="${model}">${model}</option>`;
+                        });
+                    });
+            } else {
+                modelDropdown.innerHTML = '<option value="">Select Make first</option>';
+            }
+        }
+
+        function updateYears() {
+            const make = document.getElementById('car_make').value;
+            const model = document.getElementById('car_model').value;
+            const yearDropdown = document.getElementById('car_year');
+            yearDropdown.innerHTML = '<option value="">Loading years...</option>';
+
+            if (make && model) {
+                fetch(`?action=get_years&make=${make}&model=${model}`)
+                    .then(response => response.json())
+                    .then(years => {
+                        yearDropdown.innerHTML = '<option value="">Select Year or Other</option>';
+                        years.forEach(year => {
+                            yearDropdown.innerHTML += `<option value="${year}">${year}</option>`;
+                        });
+                    });
+            } else {
+                yearDropdown.innerHTML = '<option value="">Select Model first</option>';
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -333,8 +419,9 @@ $conn->close();
         <div class ="container2">
             <div class="container1">
             <section class="section-left-boarder">
-                <form action="quote_tool.php" method="post">
-                    <label for="first name"><b>First Name:</b></label> <br>
+
+            <form method="POST" action="">
+                <label for="first name"><b>First Name:</b></label> <br>
                     <input type="text" id="first_name" name="first_name" style=" margin-top: 10px; border:2px solid #0F49B8;border-radius: 5px; height: 25px;" maxlength="50" size="70" required><br><br>
 
                     <label for="last_name" for="last name"><b>Last Name:</b></label> <br>
@@ -346,61 +433,48 @@ $conn->close();
                     <label for="phone_num"><b>Phone Number:</b></label> <br>
                     <input type="text" id="phone_num" name="phone_num" style=" margin-top: 10px; border:2px solid #0F49B8;border-radius: 5px; height: 25px;" maxlength="50" size="70" required><br><br>
                     
-                    <label for="car_make"><b>Car Make:</b></label><br>
-                    
-                    <select style = "border: 2px solid #0F49B8;" name="car_make" id="car_make" required>
-                        <option disabled selected value> Select an option </option>
-                        <?php
-                        while($rows = $carMakesQuery->fetch_assoc()){
-                            $carMake = $rows['car_make'];
-                            echo "<option value='$carMake'>$carMake</option>";
-                        }
-                        ?>
-                    </select> <br><br>
-                  
-                    <label for="car_model"><b>Car Model:</b></label><br>
-                    
-                    <select style = "border: 2px solid #0F49B8;" name="car_model" id="car_model" required>
-                        <option disabled selected value> Select an option </option>
-                        <?php
-                        while($rows = $carModelsQuery->fetch_assoc()){
-                            $carModel = $rows['car_model'];
-                            echo "<option value='$carModel'>$carModel</option>";
-                        }
-                        ?>
-                    </select> <br><br>
+            <div class="form-group">
+                <label for="car_make">Vehicle Make:</label>
+                <select style = "border: 2px solid #0F49B8;" name="car_make" id="car_make" onchange="updateModels()" required>
+                    <option value="">Select Make</option>
+                    <?php while ($row = $makes->fetch_assoc()): ?>
+                        <option value="<?= $row['car_make'] ?>"><?= $row['car_make'] ?></option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="car_model">Vehicle Model:</label>
+                <select style = "border: 2px solid #0F49B8;" name="car_model" id="car_model" onchange="updateYears()" required>
+                    <option value="">Select Make First</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="car_year">Vehicle Year:</label>
+                <select style = "border: 2px solid #0F49B8;" name="car_year" id="car_year" required>
+                    <option value="">Select Model First</option>
+                </select>
+            </div>
 
-                    <label for="car_year"><b>Car Year:</b></label> <br>
-                    <select style = "border: 2px solid #0F49B8;" name="car_year" id="car_year">
-                        <option disabled selected value> Select an option </option>
-                        <?php
-                        while($rows = $carYearsQuery->fetch_assoc()){
-                            $carYear = $rows['car_year'];
-                            echo "<option value='$carYear'>$carYear</option>";
-                        }
-                        ?>
-                    </select> <br><br>
-
-                    <label for="tint_type"><b>Tint Type:</b></label> <br>
+            <label for="tint_type"><b>Tint Type:</b></label> <br>
                     <select style = "border: 2px solid #0F49B8;" name="tint_type" id="tint_type" required>
-                        <option disabled selected value> Select an option </option>
+                        <option disabled selected value> Select Tint Type </option>
                         <option value="carbon">Carbon</option>
                         <option value="ceramic">Ceramic</option>
                     </select> <br><br>
 
                     <label for="tint_coverage"><b>Tint Coverage:</b></label> <br>
                     <select style = "border: 2px solid #0F49B8;" name="tint_coverage" id="tint_coverage" required>
-                        <option disabled selected value> Select an option </option>
+                        <option disabled selected value> Select Tint Coverage</option>
                         <option value="full">Full</option>
                         <option value="front">Front</option>
                         <option value="back">Back</option>
                     </select> <br><br>
 
-                    <div class="button-wrapper">
+            <div class="button-wrapper">
                     <button style="box-shadow: 0 4px #999;" class="button-1" role="button">Submit</button><br>
                     </div>
-                </form>
-
+            
+        </form>
                 <h2 style="font-weight: bold; margin-top: 70px;">Your Quoting Information</h2>
                 <section class="quote-price">
                     <p style="font-family: Arial, sans-serif; font-size: 28px; color: #333;">
