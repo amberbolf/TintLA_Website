@@ -54,7 +54,7 @@ $sql = "CREATE TABLE IF NOT EXISTS customers (
   car_model VARCHAR(50),
   car_year INT,
   tint_type VARCHAR(50),
-  coverage_type VARCHAR(50),
+  tint_coverage VARCHAR(50),
   quoted_price FLOAT
 )";
 if ($conn->query($sql) === TRUE) {

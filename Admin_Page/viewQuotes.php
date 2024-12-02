@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 80px;
             background-color: #ffffff;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <td><?= htmlspecialchars($row['car_make']) ?></td>
                             <td><?= htmlspecialchars($row['car_model']) ?></td>
                             <td><?= htmlspecialchars($row['tint_type']) ?></td>
-                            <td><?= htmlspecialchars($row['coverage_type']) ?></td>
+                            <td><?= htmlspecialchars($row['tint_coverage']) ?></td>
                             <td>$<?= htmlspecialchars(number_format($row['quoted_price'], 2)) ?></td>
                         </tr>
                     <?php endforeach; ?>
