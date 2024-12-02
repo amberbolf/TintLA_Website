@@ -278,15 +278,15 @@ $conn->close();
             <fieldset id="carbon-fields" class="price-fields">
                 <legend>Carbon Prices</legend>
                 <div class="form-group">
-                    <label for="full_carbon">Price (Carbon):</label>
+                    <label for="full_carbon">Full Price:</label>
                     <input type="number" step="0.01" name="full_carbon" id="full_carbon" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="front_carbon">Front Price (Carbon):</label>
+                    <label for="front_carbon">Front Price:</label>
                     <input type="number" step="0.01" name="front_carbon" id="front_carbon" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="back_carbon">Back Price (Carbon):</label>
+                    <label for="back_carbon">Back Price:</label>
                     <input type="number" step="0.01" name="back_carbon" id="back_carbon" min="0">
                 </div>
             </fieldset>
@@ -294,15 +294,15 @@ $conn->close();
             <fieldset id="ceramic-fields" class="price-fields">
                 <legend>Ceramic Prices</legend>
                 <div class="form-group">
-                    <label for="full_ceramic">Price (Ceramic):</label>
+                    <label for="full_ceramic">Full Price:</label>
                     <input type="number" step="0.01" name="full_ceramic" id="full_ceramic" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="front_ceramic">Front Price (Ceramic):</label>
+                    <label for="front_ceramic">Front Price:</label>
                     <input type="number" step="0.01" name="front_ceramic" id="front_ceramic" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="back_ceramic">Back Price (Ceramic):</label>
+                    <label for="back_ceramic">Back Price:</label>
                     <input type="number" step="0.01" name="back_ceramic" id="back_ceramic" min="0">
                 </div>
             </fieldset>
