@@ -4,6 +4,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: adminLogin.php");
     exit();
 }
+
 // Database configuration
 $host = 'localhost'; // Database host
 $dbname = 'tintla_database'; // Database name
@@ -21,6 +22,9 @@ try {
 // Initialize variables
 $search_term = '';
 $contacts = [];
+$per_page = 20; // Number of results per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page
+$offset = ($page - 1) * $per_page; // Offset for SQL query
 
 // Check if a search is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -30,20 +34,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($search_term)) {
         if (is_numeric($search_term)) {
             // Search by phone number
-            $stmt = $pdo->prepare("SELECT * FROM inquiries WHERE phone_num LIKE :search_term ORDER BY inquiry_id DESC LIMIT 20");
-            $stmt->execute(['search_term' => '%' . $search_term . '%']);
+            $stmt = $pdo->prepare("SELECT * FROM inquiries WHERE phone_num LIKE :search_term ORDER BY inquiry_id DESC LIMIT :limit OFFSET :offset");
+            $stmt->bindValue(':search_term', '%' . $search_term . '%', PDO::PARAM_STR);
         } else {
             // Search by name (first or last)
-            $stmt = $pdo->prepare("SELECT * FROM inquiries WHERE first_name LIKE :search_term OR last_name LIKE :search_term ORDER BY inquiry_id DESC LIMIT 20");
-            $stmt->execute(['search_term' => '%' . $search_term . '%']);
+            $stmt = $pdo->prepare("SELECT * FROM inquiries WHERE first_name LIKE :search_term OR last_name LIKE :search_term ORDER BY inquiry_id DESC LIMIT :limit OFFSET :offset");
+            $stmt->bindValue(':search_term', '%' . $search_term . '%', PDO::PARAM_STR);
         }
+        $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
         $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 } else {
     // Fetch the top 20 recent contacts
-    $stmt = $pdo->query("SELECT * FROM inquiries ORDER BY inquiry_id DESC LIMIT 20");
+    $stmt = $pdo->prepare("SELECT * FROM inquiries ORDER BY inquiry_id DESC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
     $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+// Get total number of inquiries for pagination
+$stmt = $pdo->query("SELECT COUNT(*) FROM inquiries");
+$total_inquiries = $stmt->fetchColumn();
+$total_pages = ceil($total_inquiries / $per_page); // Total pages required
 ?>
 
 <!DOCTYPE html>
@@ -119,6 +134,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #999;
             margin-top: 20px;
         }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination a {
+            padding: 10px;
+            margin: 0 5px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
+        .pagination span {
+            padding: 10px;
+            margin: 0 5px;
+            color: #007BFF;
+        }
     </style>
 </head>
 <body>
@@ -160,6 +195,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php else: ?>
             <p class="no-results">No contacts found.</p>
         <?php endif; ?>
+
+        <!-- Pagination Links -->
+        <div class="pagination">
+            <?php if ($page > 1): ?>
+                <a href="?page=<?= $page - 1 ?>">Previous</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <span>
+                    <a href="?page=<?= $i ?>" <?= $i === $page ? 'style="background-color: #0056b3;"' : '' ?>><?= $i ?></a>
+                </span>
+            <?php endfor; ?>
+
+            <?php if ($page < $total_pages): ?>
+                <a href="?page=<?= $page + 1 ?>">Next</a>
+            <?php endif; ?>
+        </div>
     </div>
 </body>
 </html>
